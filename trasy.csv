@@ -1,0 +1,21 @@
+id,name,region,start_lat,start_lon,end_lat,end_lon,length_km,elevation_gain,difficulty,terrain_type
+1,Dolina Kościeliska,Tatry,49.2798,19.8675,49.2336,19.8747,7.2,320,2,mountain
+2,Ścieżka wokół jeziora Solińskiego,Bieszczady,49.3983,22.4675,49.3983,22.4675,15.5,50,1,lakeside
+3,Orla Perć,Tatry,49.2261,20.0114,49.2130,20.0130,4.5,800,3,mountain
+4,Trasa na Śnieżkę,Karkonosze,50.7362,15.7423,50.7368,15.7395,6.2,600,2,mountain
+5,Spacer po Trójmiejskim Parku Krajobrazowym,Gdańsk,54.4096,18.5313,54.4210,18.5432,8.0,90,1,forest
+6,Łysa Góra przez las,Świętokrzyskie,50.8623,21.0662,50.8599,21.0607,3.5,150,1,forest
+7,Trasa nad Morskie Oko,Tatry,49.2566,20.0703,49.1980,20.0659,8.5,500,2,mountain
+8,Szlak wokół jeziora Wigry,Suwalszczyzna,54.0198,23.1121,54.0198,23.1121,17.3,110,1,lakeside
+9,Rezerwat Białe Ługi,Kieleckie,51.0500,20.7833,51.0478,20.7860,4.2,30,1,wetlands
+10,Trasa do Wodospadu Kamieńczyka,Karkonosze,50.8283,15.5254,50.8245,15.5130,3.0,120,1,mountain
+11,Pętla na Giewont,Tatry,49.2795,19.9811,49.2625,19.9514,7.8,740,3,mountain
+12,Trasa na Turbacz,Gorce,49.5946,20.1134,49.5890,20.1111,12.0,600,2,forest
+13,Beskidzkie Polany,Beskid Żywiecki,49.5742,19.2814,49.5710,19.2899,9.3,350,2,mountain
+14,Las Kabacki, Warszawa,Mazowsze,52.1276,21.0571,52.1350,21.0480,5.2,40,1,forest
+15,Pętla wzdłuż Warty,Wielkopolska,52.2298,18.2594,52.2298,18.2594,10.0,60,1,riverside
+16,Trasa przez Puszczę Białowieską,Podlasie,52.6992,23.8528,52.6950,23.8480,14.5,80,1,forest
+17,Trasa przez Dolinę Prądnika,Ojcowski Park Narodowy,50.2314,19.8206,50.2432,19.8123,5.6,180,2,valley
+18,Spacer po Helu,Półwysep Helski,54.6114,18.8003,54.6166,18.8132,4.0,10,1,coastal
+19,Szlak na Skrzyczne,Beskid Śląski,49.6925,19.0132,49.6833,19.0321,6.7,630,3,mountain
+20,Ścieżka na Kopiec Kościuszki,Kraków,50.0601,19.9116,50.0544,19.9177,2.8,90,1,urban
