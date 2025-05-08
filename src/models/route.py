@@ -1,6 +1,3 @@
-
-from models.user_preference import UserPreference
-
 class Route:
     def __init__(self, *, id, name, region, 
                  start_lat, start_lon, end_lat, end_lon, 
@@ -20,7 +17,7 @@ class Route:
 
 
 
-    def check_preference(self, prefs: UserPreference) -> bool:
+    def check_preference(self, prefs) -> bool:
         '''
         Returns True if this route's length and difficulty
         are within the user's preferences.

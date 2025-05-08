@@ -2,7 +2,7 @@ class UserPreference():
     '''
     
     '''
-    def __init__(self, preferred_temp, max_rain, max_difficulty, max_length):
+    def __init__(self, preferred_temp = 15, max_rain = 20, max_difficulty = 3, max_length = 100):
         self._preferred_temp = preferred_temp
         self._max_rain = max_rain
         self._max_difficulty = max_difficulty
@@ -20,7 +20,7 @@ class UserPreference():
         '''
         Returns True if average temperature and total rain are acceptable.
         '''
-        temp_ok = (self._preferred_temp[0] <= weather.avg_temp <= self._preferred_temp[1])
+        temp_ok = ((self._preferred_temp + 5) <= weather.avg_temp <= (self._preferred_temp + 5))
         rain_ok = (weather.precipitation <= self._max_rain)
         return temp_ok and rain_ok
 

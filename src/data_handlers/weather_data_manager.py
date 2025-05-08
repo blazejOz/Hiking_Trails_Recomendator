@@ -6,7 +6,7 @@ class WeatherDataManager:
 
 
     @staticmethod
-    def featch_weather_data(routes, start_date: str = "2025-05-10"):
+    def fetch_weather_data(routes, start_date: str = "2025-05-10"):
         '''
         For each Route in `routes`, fetch weather for a single day
         (start_date) and return a list of WeatherData objects.
