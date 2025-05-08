@@ -1,5 +1,5 @@
 
-from src.models.user_preference import UserPreference
+from src.models.user_preferance import UserPreference
 
 class Route:
     def __init__(self, *, id, name, region, 
@@ -21,19 +21,19 @@ class Route:
 
 
     def check_preference(self, prefs: UserPreference) -> bool:
-        """
+        '''
         Returns True if this route's length and difficulty
         are within the user's preferences.
-        """
+        '''
         return prefs.matches_route(self)
 
     def estimated_completion(self) -> float:
-        """
+        '''
         Estimates completion time in hours, based on:
           - base speeds by terrain
           - difficulty multiplier
           - +1h per 600m elevation gain
-        """
+        '''
         # base walking speeds (km/h) by terrain
         base_speeds = {
             "mountain": 3.5,

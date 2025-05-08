@@ -18,10 +18,10 @@ class WeatherData:
 
 
     def is_sunny(self):
-        pass
+        return self._cloud_cover < 30
 
     def is_rainy(self):
-        pass
+        return self._precipitation > 0
 
     def comfort_index(self):
-        pass
+        return 100
