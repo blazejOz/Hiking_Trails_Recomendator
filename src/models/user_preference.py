@@ -1,4 +1,4 @@
-class UserPreference:
+class UserPreference():
     '''
     
     '''

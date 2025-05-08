@@ -1,5 +1,5 @@
 
-from src.models.user_preferance import UserPreference
+from models.user_preference import UserPreference
 
 class Route:
     def __init__(self, *, id, name, region, 
