@@ -20,7 +20,7 @@ class UserPreference():
         '''
         Returns True if average temperature and total rain are acceptable.
         '''
-        temp_ok = ((self._preferred_temp + 5) <= weather.avg_temp <= (self._preferred_temp + 5))
+        temp_ok = ((self._preferred_temp - 10) <= weather.avg_temp <= (self._preferred_temp + 10))
         rain_ok = (weather.precipitation <= self._max_rain)
         return temp_ok and rain_ok
 

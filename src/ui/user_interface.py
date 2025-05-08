@@ -18,13 +18,14 @@ class UserInterface():
 
         
     @staticmethod
-    def print_routes(routes):
+    def print_routes(route_weather_pairs):
         print("\n=== Lista rekomendowanych tras ===")
-        for route in routes:
+        for route, weather in route_weather_pairs:
             print(f"{route.id}. {route.name}  ({route.region})")
-            print(f"   Długość: {route.length_km} km  |  Trudność: {route.difficulty}/3")
-            # jeśli zaimplementowałeś estimated_completion:
-            print(f"   Szacowany czas: {route.estimated_completion()} h")
-            print(f"   Tagi: {', '.join(route.tags)}\n")
+            print(f"    Długość: {route.length_km} km")
+            print(f"    Trudność: {route.difficulty}/3")
+            print(f"    Szacowany czas: {route.estimated_completion()} h")
+            print(f"    Komfort pogodowy: {weather.comfort_index()}")
+            print(f"    Tagi: {', '.join(route.tags)}\n")
 
     
