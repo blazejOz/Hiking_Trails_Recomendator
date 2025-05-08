@@ -28,3 +28,9 @@ class RouteDataManager:
                     tags=row["tags"],
                 ))
         return trails
+    
+    def filter_routes(routes):
+        pass
+
+    def save_routes(routes):
+        pass

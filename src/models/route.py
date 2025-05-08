@@ -13,6 +13,7 @@ class Route:
         self._difficulty      = int(difficulty)
         self._terrain_type    = terrain_type
         self._tags            = tags.split(",")
+        
     
 
 
@@ -39,17 +40,19 @@ class Route:
             "lakeside": 4.5
         }
         speed = base_speeds.get(self._terrain_type, 4.0)
+
         # difficulty multiplier: 1→1.0, 2→1.3, 3→1.6
         diff_mult = {1:1.0, 2:1.3, 3:1.6}.get(self._difficulty, 1.0)
 
         moving_time = (self._length_km / speed) * diff_mult
         climb_time  = self._elevation_gain / 600.0
         total_hours = moving_time + climb_time
+        
         return round(total_hours, 2)
 
 
 
-    def midpoint(self):
+    def midpoint(self) -> tuple:
         lat = (self._start[0] + self._end[0]) / 2
         lon = (self._start[1] + self._end[1]) / 2
         return (lat, lon)
@@ -58,11 +61,6 @@ class Route:
     @property
     def region(self):
         return self._region
-
-
-
-
-
 
     @property
     def id(self):

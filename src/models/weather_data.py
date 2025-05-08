@@ -15,13 +15,14 @@ class WeatherData:
         self._sunshine_hours  = float(sunshine_hours)
         self._cloud_cover     = float(cloud_cover)
 
-    def is_sunny(self):
+    def is_sunny(self) -> bool:
         return self._cloud_cover < 30
 
-    def is_rainy(self):
+    def is_rainy(self) -> bool:
         return self._precipitation > 0
 
-    def comfort_index(self):
+    def comfort_index(self) -> int:
+        
         temp_score  = max(0, 100 - abs(self._avg_temp - 20) * 4)
         rain_score  = max(0, 100 - self._precipitation * 10)
         cloud_score = max(0, 100 - self._cloud_cover)
