@@ -13,11 +13,28 @@ class Route:
         self._terrain_type    = terrain_type
         self._tags            = tags.split(",")
     
+
+
+
+
+
+
     @property
     def midpoint(self):
         lat = (self._start[0] + self._end[0]) / 2
         lon = (self._start[1] + self._end[1]) / 2
         return (lat, lon)
+    
+
+    @property
+    def region(self):
+        return self._region
+
+
+
+
+
+
     @property
     def id(self):
         return self._id
@@ -26,9 +43,6 @@ class Route:
     def name(self):
         return self._name
 
-    @property
-    def region(self):
-        return self._region
 
     @property
     def start(self):
