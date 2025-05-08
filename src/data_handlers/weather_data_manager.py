@@ -63,7 +63,7 @@ class WeatherDataManager:
             "min_temp":       round(min(temps), 1),
             "max_temp":       round(max(temps), 1),
             "precipitation":  round(sum(precs), 1),
-            "sunshine_hours": round(sum(suns)/3600, 1),
+            "sunshine_hours": round(sum(suns)/3600, 2),
             "cloud_cover":    round(sum(clouds) / len(clouds), 1),
         }
 
