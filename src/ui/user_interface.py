@@ -6,7 +6,14 @@ from src.models.user_preference import UserPreference
 
 class UserInterface():
 
-    def user_interface():
+
+
+    def user_run():
+
+        trails = RouteDataManager.load_routes("data/routes/routes.csv")
+        weather_data = WeatherDataManager.fetch_weather_data(trails)
+
+        
 
         print("=== Preferencje użytkownika ===")
         preferred_temp = float(input("Preferowana temperatura(+/- 5stopni): "))

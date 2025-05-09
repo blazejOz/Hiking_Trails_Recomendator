@@ -16,7 +16,7 @@ def main():
     for w in weather_data[:3]:
         print(" ", w.date, "avg_temp:", w.avg_temp, "rain:", w.precipitation)
 
-    user_prefs = UserInterface.user_interface()
+    user_prefs = UserInterface.user_run()
 
     recommender = RouteRecommender()
     pairs = recommender.recommend(trails, weather_data, user_prefs)
