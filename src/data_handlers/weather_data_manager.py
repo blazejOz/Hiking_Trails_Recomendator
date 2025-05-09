@@ -12,13 +12,13 @@ class WeatherDataManager:
         (start_date) and return a list of WeatherData objects.
         
         '''
-        weather = []
-        for trail in routes:
-            lat, lon = trail.midpoint()
+        weathers = []
+        for route in routes:
+            lat, lon = route.midpoint()
             forecast = WeatherDataManager.fetch_day_forecast(lat,lon,start_date)
-            weather.append(WeatherData(
+            weathers.append(WeatherData(
                 date_str        = forecast["date"],
-                location_id     = trail.region,
+                location_id     = route.region,
                 avg_temp        = forecast["avg_temp"],
                 min_temp        = forecast["min_temp"],
                 max_temp        = forecast["max_temp"],
@@ -27,18 +27,19 @@ class WeatherDataManager:
                 cloud_cover     = forecast["cloud_cover"],
             ))
         
-        return weather
+        return weathers
 
 
 
     @staticmethod
     def fetch_day_forecast(lat: float, lon: float, date) -> dict:
-        """
+        '''
         Fetches the next-24h hourly forecast for (lat, lon) and
         returns a single dict with keys:
           date, location_id, avg_temp, precipitation,
           cloud_cover, sunshine_hours
-        """
+        '''
+
         url = (
             "https://api.open-meteo.com/v1/forecast"
             f"?latitude={lat}&longitude={lon}"
@@ -66,6 +67,10 @@ class WeatherDataManager:
             "sunshine_hours": round(sum(suns)/3600, 2),
             "cloud_cover":    round(sum(clouds) / len(clouds), 1),
         }
+
+    @staticmethod
+    def weather_statistic(route: Route):
+        pass
 
     @staticmethod
     def load_weather_data(file_path):
