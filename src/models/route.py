@@ -6,8 +6,10 @@ class Route:
         self._id = int(id)
         self._name = name
         self._region = region
-        self._start = (float(start_lat), float(start_lon))
-        self._end   = (float(end_lat),   float(end_lon))
+        self._start_lat = float(start_lat)
+        self._start_lon = float(start_lon)
+        self._end_lat   = float(end_lat)
+        self._end_lon   = float(end_lon)
         self._length_km       = float(length_km)
         self._elevation_gain  = int(elevation_gain)
         self._difficulty      = int(difficulty)
@@ -50,11 +52,9 @@ class Route:
         
         return round(total_hours, 2)
 
-
-
     def midpoint(self) -> tuple:
-        lat = (self._start[0] + self._end[0]) / 2
-        lon = (self._start[1] + self._end[1]) / 2
+        lat = (self._start_lat + self._end_lat) / 2
+        lon = (self._start_lon + self._end_lat) / 2
         return (lat, lon)
     
 
@@ -72,12 +72,20 @@ class Route:
 
 
     @property
-    def start(self):
-        return self._start
+    def start_lat(self):
+        return self._start_lat
     
     @property
-    def end(self):
-        return self._end
+    def start_lon(self):
+        return self._start_lon
+
+    @property
+    def end_lat(self):
+        return self._end_lat
+
+    @property
+    def end_lon(self):
+        return self._end_lon
 
     @property
     def length_km(self):

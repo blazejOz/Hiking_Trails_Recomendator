@@ -83,4 +83,4 @@ class RouteDataManager:
                 "terrain_type": route.terrain_type,
                 "tags": ",".join(route.tags)
                 }
-                writer.writerows(row)
+                writer.writerow(row)
