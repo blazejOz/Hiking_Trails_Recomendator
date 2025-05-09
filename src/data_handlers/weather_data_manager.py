@@ -29,8 +29,6 @@ class WeatherDataManager:
         
         return weathers
 
-
-
     @staticmethod
     def fetch_day_forecast(lat: float, lon: float, date) -> dict:
         '''
@@ -70,7 +68,38 @@ class WeatherDataManager:
 
     @staticmethod
     def weather_statistic(route: Route):
-        pass
+        '''
+        Prints:
+          - route.id and route.name
+          - average temperature over past 30 days
+          - average daily precipitation over past 30 days
+          - average cloud cover over past 30 days
+        '''
+        lat, lon = route.midpoint()
+
+        url = (
+            "https://api.open-meteo.com/v1/forecast"
+            f"?latitude={lat}&longitude={lon}"
+            "&daily=temperature_2m_mean,precipitation_sum,cloudcover_mean"
+            "&past_days=30"
+            "&timezone=Europe%2FWarsaw"
+        )
+        resp = requests.get(url)
+        resp.raise_for_status()
+        daily = resp.json()["daily"]
+
+        temps  = daily["temperature_2m_mean"]   
+        precs  = daily["precipitation_sum"]      
+        clouds = daily["cloudcover_mean"]        
+
+        avg_temp  = round(sum(temps)  / len(temps), 1)
+        avg_prec  = round(sum(precs)  / len(precs), 1)
+        avg_cloud = round(sum(clouds)/ len(clouds), 1)
+
+        print(f"{route.id}. {route.name}")
+        print(f"  Średnia temperatura (30 dni):      {avg_temp} °C")
+        print(f"  Średnie opady (30 dni):            {avg_prec} mm")
+        print(f"  Średnie zachmurzenie (30 dni):     {avg_cloud}%\n")
 
     @staticmethod
     def load_weather_data(file_path):
