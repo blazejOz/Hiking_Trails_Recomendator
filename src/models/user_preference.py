@@ -29,7 +29,7 @@ class UserPreference():
                            max_rain=None, max_difficulty=None,
                            max_length=None):
         '''
-        Update any subset of preferences in place.
+        Update of preferences in place.
         '''
         if preferred_temp is not None:
             self._preferred_temp = preferred_temp

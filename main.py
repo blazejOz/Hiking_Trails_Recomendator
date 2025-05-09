@@ -5,7 +5,7 @@ from src.recommenders.route_recomender import RouteRecommender
 
 def main():
 
-    trails = RouteDataManager.load_trails("data/routes/routes.csv")
+    trails = RouteDataManager.load_routes("data/routes/routes.csv")
     weather_data = WeatherDataManager.fetch_weather_data(trails) 
 
 
