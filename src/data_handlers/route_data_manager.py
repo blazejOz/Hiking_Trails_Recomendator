@@ -30,9 +30,27 @@ class RouteDataManager:
                 ))
         return trails
     
-    def filter_routes(routes: List[Route]) -> List[Route]:
-        pass
+    @staticmethod
+    def filter_routes(routes: List[Route],
+                        *,
+                        max_length:float = None,
+                        max_difficulty:int = None,
+                        terrain_type:str = None
+                      ) -> List[Route]:
+        filtered = routes
 
+        if max_length is not None:
+            filtered = [r for r in filtered if r.length_km <= max_length]
+
+        if max_difficulty is not None:
+            filtered = [r for r in filtered if r.difficulty <= max_difficulty]
+
+        if terrain_type is not None:
+            filtered = [r for r in filtered if r.terrain_type == terrain_type]
+        
+        return filtered
+
+    @staticmethod
     def save_routes(routes: List[Route], filename="./data/routes/saved_routres.csv"):
         '''
         save routes to data/routes/saved_routes.csv

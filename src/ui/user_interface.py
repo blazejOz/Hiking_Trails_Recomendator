@@ -6,14 +6,12 @@ from src.models.user_preference import UserPreference
 
 class UserInterface():
 
-
-
-    def user_run():
-
-        trails = RouteDataManager.load_routes("data/routes/routes.csv")
-        weather_data = WeatherDataManager.fetch_weather_data(trails)
-
-        
+    @staticmethod
+    def run():
+        #Loading Routes 
+        routes = RouteDataManager.load_routes("data/routes/routes.csv")
+        #Feathcing weather from routes
+        weather_data = WeatherDataManager.fetch_weather_data(routes)
 
         print("=== Preferencje użytkownika ===")
         preferred_temp = float(input("Preferowana temperatura(+/- 5stopni): "))
@@ -21,7 +19,12 @@ class UserInterface():
         preferred_difficulty = int(input("Maksymalny poziom trudności (1 = łatwy, 3 = trudny): "))
         preferred_length = float(input("Maksymalna długość trasy (km): "))
 
-        return UserPreference(preferred_temp, max_rain, preferred_difficulty, preferred_length)
+        user_prefs = UserPreference(preferred_temp, max_rain, preferred_difficulty, preferred_length)
+
+        recommender = RouteRecommender()
+        pairs = recommender.recommend(routes, weather_data, user_prefs)
+
+        UserInterface.print_routes(pairs)
 
         
     @staticmethod
