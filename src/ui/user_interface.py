@@ -13,16 +13,23 @@ class UserInterface():
         #Feathcing weather from routes
         weather_data = WeatherDataManager.fetch_weather_data(routes)
 
-        print("=== Preferencje użytkownika ===")
-        preferred_temp = float(input("Preferowana temperatura(+/- 5stopni): "))
-        max_rain = float(input("max rain: "))
-        preferred_difficulty = int(input("Maksymalny poziom trudności (1 = łatwy, 3 = trudny): "))
-        preferred_length = float(input("Maksymalna długość trasy (km): "))
+        user_prefs = UserPreference()
+        flag = True
 
-        user_prefs = UserPreference(preferred_temp, max_rain, preferred_difficulty, preferred_length)
+        while(flag):
+            print("=== Preferencje użytkownika ===")
+            preferred_temp = float(input("Preferowana temperatura(+/- 5stopni): "))
+            max_rain = float(input("max rain: "))
+            preferred_difficulty = int(input("Maksymalny poziom trudności (1 = łatwy, 3 = trudny): "))
+            preferred_length = float(input("Maksymalna długość trasy (km): "))
 
-        recommender = RouteRecommender()
-        pairs = recommender.recommend(routes, weather_data, user_prefs)
+            user_prefs.update_preferences(preferred_temp, max_rain, preferred_difficulty, preferred_length)
+            
+            pairs = RouteRecommender.recommend(routes, weather_data, user_prefs)
+            print(f"Znaleziono {len(pairs)} tras")
+            x = input("Czy chcesz zmienic preferencje?(Y/N)")
+            if x.lower() == "n": 
+                flag = False
 
         UserInterface.print_routes(pairs)
 

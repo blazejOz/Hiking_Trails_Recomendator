@@ -6,12 +6,12 @@ from tests.test_weather_data_manager import TestWeatherDataManager
 
 def main():
     print()
-    #UserInterface.run()
+    UserInterface.run()
     
     #tests:
-    TestRouteManager.run()
-    
-    TestWeatherDataManager.run()
+    #TestRouteManager.run()
+
+    #TestWeatherDataManager.run()
 
 
 
