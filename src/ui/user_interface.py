@@ -14,9 +14,8 @@ class UserInterface():
         weather_data = WeatherDataManager.fetch_weather_data(routes)
 
         user_prefs = UserPreference()
-        flag = True
 
-        while(flag):
+        while True:
             print("=== Preferencje użytkownika ===")
             preferred_temp = float(input("Preferowana temperatura(+/- 5stopni): "))
             max_rain = float(input("max rain: "))
@@ -29,7 +28,7 @@ class UserInterface():
             print(f"Znaleziono {len(pairs)} tras")
             x = input("Czy chcesz zmienic preferencje?(Y/N)")
             if x.lower() == "n": 
-                flag = False
+                break
 
         UserInterface.print_routes(pairs)
 

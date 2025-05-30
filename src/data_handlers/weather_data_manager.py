@@ -1,17 +1,23 @@
 from src.models.route import Route
 from src.models.weather_data import WeatherData
 import requests
+from datetime import date
+
 
 class WeatherDataManager:
 
 
     @staticmethod
-    def fetch_weather_data(routes, start_date: str = "2025-05-10",):
+    def fetch_weather_data(routes, start_date: str = None):
         '''
         For each Route in `routes`, fetch weather for a single day
         (start_date) and return a list of WeatherData objects.
         
         '''
+        if start_date is None:
+            start_date = date.today().isoformat()
+
+
         weathers = []
         for route in routes:
             lat, lon = route.midpoint()
