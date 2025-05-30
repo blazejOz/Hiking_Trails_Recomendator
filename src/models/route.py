@@ -2,7 +2,7 @@ class Route:
     def __init__(self, *, id, name, region, 
                  start_lat, start_lon, end_lat, end_lon, 
                  length_km, elevation_gain,
-                 difficulty, terrain_type, tags):
+                 difficulty, info):
         self._id = int(id)
         self._name = name
         self._region = region
@@ -13,8 +13,8 @@ class Route:
         self._length_km       = float(length_km)
         self._elevation_gain  = int(elevation_gain)
         self._difficulty      = int(difficulty)
-        self._terrain_type    = terrain_type
-        self._tags            = tags.split(",")
+        self._info = info
+        
         
     
 
