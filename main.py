@@ -1,18 +1,8 @@
-from src.ui.user_interface import UserInterface
+from src.database.database_manager import DatabaseManager
 
-#test
-from tests.test_route_manager import TestRouteManager
-from tests.test_weather_data_manager import TestWeatherDataManager
+def run_app():
+    DatabaseManager.initialize_database()
+    print("Database initialized successfully.")
 
-def main():
-    print()
-    UserInterface.run()
-    
-    #tests:
-    #TestRouteManager.run()
-
-    #TestWeatherDataManager.run()
-
-
-
-main()
+if __name__ == '__main__':
+    run_app()
