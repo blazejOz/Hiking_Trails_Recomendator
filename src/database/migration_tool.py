@@ -9,5 +9,9 @@ class MigrationTool:
     @staticmethod
     def migrate_routes():
         routes = RouteDataManager.load_routes(CSV_PATH)
-        
+        for route in routes:
+            route_id = RouteRepository.add_route(route)
+            print(f"Route '{route.name}' added with ID {route_id}.")
+        print("Route migration completed successfully.")
+
         

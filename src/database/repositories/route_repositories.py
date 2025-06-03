@@ -1,20 +1,26 @@
+from src.models.route import Route
+from src.database.database_manager import connect
+
+
 class RouteRepository:
-    def __init__(self, db):
-        self.db = db
-
-    def get_all_routes(self):
-        return self.db.query("SELECT * FROM routes")
-
-    def get_route_by_id(self, route_id):
-        return self.db.query("SELECT * FROM routes WHERE id = ?", (route_id,))
-
-    def create_route(self, route_data):
-        return self.db.execute("INSERT INTO routes (name, description) VALUES (?, ?)", 
-                               (route_data['name'], route_data['description']))
-
-    def update_route(self, route_id, route_data):
-        return self.db.execute("UPDATE routes SET name = ?, description = ? WHERE id = ?", 
-                               (route_data['name'], route_data['description'], route_id))
-
-    def delete_route(self, route_id):
-        return self.db.execute("DELETE FROM routes WHERE id = ?", (route_id,))
+    
+    @staticmethod
+    def add_route(route: Route):
+        """
+        Add a new route to the database.
+        """
+        conn = connect()
+        cursor = conn.cursor()
+        cursor.execute(
+            """
+            INSERT INTO routes (name, region, start_lat, start_lon, end_lat, end_lon, length_km, elevation_gain, difficulty, terrain_type, tags)
+            VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+            """,
+            (route.name, route.region, route.start_lat, route.start_lon,
+             route.end_lat, route.end_lon, route.length_km, route.elevation_gain,
+             route.difficulty, route.terrain_type, ','.join(route.tags)),
+        )
+        conn.commit()
+        route.id = cursor.lastrowid
+        conn.close()
+        return route.id
