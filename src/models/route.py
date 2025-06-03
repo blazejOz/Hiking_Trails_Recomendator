@@ -106,3 +106,7 @@ class Route:
     @property
     def tags(self):
         return self._tags
+    
+    @id.setter
+    def id(self, value):
+        self._id = int(value)
