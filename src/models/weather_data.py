@@ -30,6 +30,21 @@ class WeatherData:
         cloud_score = max(0, 100 - self._cloud_cover)
         return round((temp_score + rain_score + cloud_score) / 3)
 
+    @property
+    def id(self):
+        return self._id
+
+    @id.setter
+    def id(self, value):
+        self._id = value
+
+    @property
+    def route_id(self):
+        return self._route_id
+    
+    @route_id.setter
+    def route_id(self, value):
+        self._route_id = value
 
     @property
     def date(self):
