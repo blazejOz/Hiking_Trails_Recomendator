@@ -3,11 +3,11 @@
 from datetime import date
 
 class WeatherData:
-    def __init__(self, *, date_str, location_lat, location_lon,
+    def __init__(self, *, date, location_lat, location_lon,
                  avg_temp, min_temp, max_temp,
                  precipitation, sunshine_hours, cloud_cover, route_id=None):
         self._id              = None
-        self._date            = date.fromisoformat(date_str)
+        self._date            = date
         self._location_lat    = location_lat
         self._location_lon    = location_lon
         self._avg_temp        = float(avg_temp)

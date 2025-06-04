@@ -23,10 +23,10 @@ class MigrationTool:
             try:
                 route_id = RouteRepository.add_route(route)
                 print(f"Route '{route.name}' added with ID {route_id}.")
-                success_count =+ 1
+                success_count += 1
             except Exception as e:
                 print(f"Error adding route '{route.name}': {e}")
-                fail_count =+ 1
+                fail_count += 1
         print(f"Migration completed: {success_count} routes added successfully, {fail_count} failed.")
         return routes
         
@@ -35,11 +35,19 @@ class MigrationTool:
         if not routes:
             print("No routes provided for weather data migration.")
             return
+        weathers = []
         for route in routes:
             try:
                 weather_data = WeatherDataManager.fetch_day_forecast(route)
-                weather_id = WeatherRepository.add_weather_data(weather_data)
-                print(f"Weather data for route '{route.name}' added with ID {weather_id}.")
-                print(f"Weather data for route '{route.name}' updated successfully.")
+                weathers.append(weather_data)
+                print(f"Weather data for route '{route.name}' fetched successfully.")
             except Exception as e:
-                print(f"Error updating weather data for route '{route.name}': {e}")
+                print(f"Error featching weather data for route '{route.name}': {e}")
+        
+        for weather in weathers:
+            try:
+                WeatherRepository.add_weather_data(weather)
+                print(f"Weather data for route ID {weather.route_id} added successfully.")
+            except Exception as e:
+                print(f"Error adding weather data for route ID {weather.route_id}: {e}")
+        

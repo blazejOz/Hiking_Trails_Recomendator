@@ -13,7 +13,7 @@ class WeatherDataManager:
         Fetches the next-24h hourly forecast for Route.midpoint(lat, lon)
         '''
         if forecast_date is None:
-            forecast_date = date.today().isoformat()
+            forecast_date = date.today()
 
         lat, lon = route.midpoint()
 
@@ -21,7 +21,7 @@ class WeatherDataManager:
             "https://api.open-meteo.com/v1/forecast"
             f"?latitude={lat}&longitude={lon}"
             "&hourly=temperature_2m,precipitation,cloud_cover,sunshine_duration"
-            f"&start_date={date}&end_date={date}"
+            f"&start_date={forecast_date}&end_date={forecast_date}"
             "&timezone=Europe%2FWarsaw"
         )
         resp = requests.get(url)
