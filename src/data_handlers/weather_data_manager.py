@@ -106,7 +106,3 @@ class WeatherDataManager:
         print(f"  Średnia temperatura (30 dni):      {avg_temp} °C")
         print(f"  Średnie opady (30 dni):            {avg_prec} mm")
         print(f"  Średnie zachmurzenie (30 dni):     {avg_cloud}%\n")
-
-    @staticmethod
-    def load_weather_data(file_path):
-        pass

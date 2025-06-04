@@ -29,6 +29,7 @@ CREATE TABLE weather_data (
     sunshine_hours REAL,
     cloud_cover INTEGER,
     UNIQUE(date, location_lat, location_lon)
+    FOREIGN KEY(route_id) REFERENCES routes(id) ON DELETE CASCADE
 );
 
 -- Tabela preferencji użytkownika
