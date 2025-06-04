@@ -2,6 +2,8 @@ import os
 from typing import List
 from src.data_handlers.route_data_manager import RouteDataManager
 from src.database.repositories.route_repositories import RouteRepository
+from src.data_handlers.weather_data_manager import WeatherDataManager
+from src.database.repositories.weather_repositories import WeatherRepository
 from src.models.route import Route
 
 
@@ -35,8 +37,9 @@ class MigrationTool:
             return
         for route in routes:
             try:
-                route_id = route.id
-                RouteRepository.update_route_weather_data(route_id, route.weather_data)
+                weather_data = WeatherDataManager.fetch_day_forecast(route)
+                weather_id = WeatherRepository.add_weather_data(weather_data)
+                print(f"Weather data for route '{route.name}' added with ID {weather_id}.")
                 print(f"Weather data for route '{route.name}' updated successfully.")
             except Exception as e:
                 print(f"Error updating weather data for route '{route.name}': {e}")

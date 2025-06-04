@@ -26,7 +26,8 @@ def main_menu():
             #create_backup()
         elif choice == '5':
             print("Importowanie danych z pliku CSV...")
-            MigrationTool.migrate_routes()
+            routes = MigrationTool.migrate_routes()
+            MigrationTool.migrate_weather_data(routes)
         elif choice == '0':
             print("Dziękujemy za skorzystanie z aplikacji!")
             break

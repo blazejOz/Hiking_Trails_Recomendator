@@ -35,7 +35,7 @@ class WeatherDataManager:
         clouds = hourly["cloud_cover"]      
 
         weather = WeatherData (
-            date =           hourly["time"][0].split("T")[0],
+            date =          forecast_date,
             location_lat=   lat,
             location_lon=   lon,
             avg_temp=       round(sum(temps) / len(temps), 1),
