@@ -14,7 +14,12 @@ class Route:
         self._elevation_gain  = int(elevation_gain)
         self._difficulty      = int(difficulty)
         self._terrain_type    = terrain_type
-        self._tags            = tags.split(",")
+        if isinstance(tags, str):
+            self._tags = tags.split(",")
+        elif isinstance(tags, list):
+            self._tags = tags
+        else:
+            self._tags = []
         
     
 

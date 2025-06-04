@@ -1,9 +1,9 @@
 import os
 from typing import List
 from src.data_handlers.route_data_manager import RouteDataManager
-from src.database.repositories.route_repositories import RouteRepository
+from src.database.repositories.route_repository import RouteRepository
 from src.data_handlers.weather_data_manager import WeatherDataManager
-from src.database.repositories.weather_repositories import WeatherRepository
+from src.database.repositories.weather_repository import WeatherRepository
 from src.models.route import Route
 
 

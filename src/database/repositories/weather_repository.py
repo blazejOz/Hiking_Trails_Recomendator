@@ -25,3 +25,32 @@ class WeatherRepository:
         weather_data.id = cursor.lastrowid
         conn.close()
         return weather_data.id
+    
+    @staticmethod
+    def get_all_weather_data() -> list[WeatherData]:
+        """
+        Retrieve all weather data from the database.
+        """
+        conn = DatabaseManager.connect()
+        cursor = conn.cursor()
+        cursor.execute("SELECT * FROM weather_data")
+        rows = cursor.fetchall()
+        conn.close()
+        
+        weather_data_list = []
+        for row in rows:
+            weather_data_list.append(WeatherData(
+                id=row[0],
+                date=row[1],
+                location_lat=row[2],
+                location_lon=row[3],
+                avg_temp=row[4],
+                min_temp=row[5],
+                max_temp=row[6],
+                precipitation=row[7],
+                sunshine_hours=row[8],
+                cloud_cover=row[9],
+                route_id=row[10]
+            ))
+        
+        return weather_data_list
