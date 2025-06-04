@@ -40,20 +40,16 @@ class WeatherData:
         self._id = value
 
     @property
-    def route_id(self):
-        return self._route_id
-    
-    @route_id.setter
-    def route_id(self, value):
-        self._route_id = value
-
-    @property
     def date(self):
         return self._date
 
     @property
-    def location_id(self):
-        return self._location_id
+    def location_lat(self):
+        return self._location_lat
+    
+    @property
+    def location_lon(self):
+        return self._location_lon
 
     @property
     def avg_temp(self):
@@ -79,4 +75,10 @@ class WeatherData:
     def cloud_cover(self):
         return self._cloud_cover
 
+    @property
+    def route_id(self):
+        return self._route_id
     
+    @route_id.setter
+    def route_id(self, value):
+        self._route_id = value
