@@ -64,20 +64,17 @@ def new_search():
         max_precipitation=max_precipitation,
         max_difficulty=max_difficulty,
         max_length_km=max_length
-    )
-    UserRepository.add_user_preference(new_user)
+    ) 
 
     routes = RouteRepository.get_all_routes()
     weather_data = WeatherRepository.get_all_weather_data()
 
     route_weather_pairs = []
     
-    for route in routes:
-        if new_user.matches_route(route):
-            for weather in weather_data:
-                if new_user.matches_weather(weather):
-                    route_weather_pairs.append((route, weather))
-
+    for route, weather in zip(routes, weather_data):
+        if new_user.matches_route(route) and new_user.matches_weather(weather):
+            route_weather_pairs.append((route, weather))
+    
     if not route_weather_pairs:
         print("Brak tras spełniających kryteria.")
     else:
@@ -89,7 +86,7 @@ def print_routes(route_weather_pairs):
     for route, weather in route_weather_pairs:
         print(f"{route.id}. {route.name}  ({route.region})")
         print(f"    Długość: {route.length_km} km")
-        print(f"    Trudność: {route.difficulty}/3")
+        print(f"    Trudność: {route.difficulty}/5")
         print(f"    Szacowany czas: {route.estimated_completion()} h")
         print(f"    Komfort pogodowy: {weather.comfort_index()}")
         print(f"    Tagi: {', '.join(route.tags)}\n")
