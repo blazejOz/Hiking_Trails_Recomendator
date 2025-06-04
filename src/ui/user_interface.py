@@ -15,8 +15,7 @@ def main_menu():
         if choice == '1':
             find_recommended_routes()
         elif choice == '2':
-            pass
-            #add_new_route()
+            add_new_route()
         elif choice == '3':
             pass
             #show_database_statistics()
@@ -42,7 +41,6 @@ def find_recommended_routes():
     choice = input("Wybierz opcję: ")
     if choice == '1':
         new_search()
-
 
 def new_search():
     from src.models.user_preference import UserPreference
@@ -80,6 +78,41 @@ def new_search():
     else:
         print_routes(route_weather_pairs)
 
+def add_new_route():
+    from src.models.route import Route
+    from src.database.repositories.route_repository import RouteRepository
+
+    print("=== Dodaj nową trasę ===")
+    name = input("Nazwa trasy: ")
+    region = input("Region: ")
+    start_lat = float(input("Szerokość geograficzna startu: "))
+    start_lon = float(input("Długość geograficzna startu: "))
+    end_lat = float(input("Szerokość geograficzna końca: "))
+    end_lon = float(input("Długość geograficzna końca: "))
+    elevation_gain = int(input("Przewyższenie (m): "))
+    terrain_type = input("Typ terenu (forest, mountain, urban, lakeside): ")
+    if terrain_type not in ["forest", "mountain", "urban", "lakeside"]:
+        print("Nieprawidłowy typ terenu. Użyto domyślnego 'forrest'.")
+        terrain_type = "forrest"
+    length_km = float(input("Długość (km): "))
+    difficulty = int(input("Trudność (1-5): "))
+    tags = input("Tagi (oddzielone przecinkami): ").split(',')
+
+    new_route = Route(
+        name=name,
+        region=region,
+        start_lat=start_lat,
+        start_lon=start_lon,
+        end_lat=end_lat,
+        end_lon=end_lon,
+        length_km=length_km,
+        elevation_gain=elevation_gain,
+        difficulty=difficulty,
+        terrain_type=terrain_type,
+        tags=tags
+    )
+    RouteRepository.add_route(new_route)
+    print(f"Trasa '{name}' została dodana pomyślnie.")
 
 def print_routes(route_weather_pairs):
     print("\n=== Lista rekomendowanych tras ===")

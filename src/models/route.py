@@ -1,5 +1,5 @@
 class Route:
-    def __init__(self, *, id, name, region, 
+    def __init__(self, *, id=None, name, region, 
                  start_lat, start_lon, end_lat, end_lon, 
                  length_km, elevation_gain,
                  difficulty, terrain_type, tags):
@@ -70,6 +70,10 @@ class Route:
     @property
     def id(self):
         return self._id
+    
+    @id.setter
+    def id(self, value):
+        self._id = int(value)
 
     @property
     def name(self):
@@ -112,6 +116,4 @@ class Route:
     def tags(self):
         return self._tags
     
-    @id.setter
-    def id(self, value):
-        self._id = int(value)
+    
