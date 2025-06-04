@@ -8,41 +8,14 @@ class WeatherDataManager:
 
 
     @staticmethod
-    def fetch_weather_data(routes, start_date: str = None):
+    def fetch_day_forecast(route: Route, forecast_date: str = None) -> WeatherData:
         '''
-        For each Route in `routes`, fetch weather for a single day
-        (start_date) and return a list of WeatherData objects.
-        
+        Fetches the next-24h hourly forecast for Route.midpoint(lat, lon)
         '''
-        if start_date is None:
-            start_date = date.today().isoformat()
+        if forecast_date is None:
+            forecast_date = date.today().isoformat()
 
-
-        weathers = []
-        for route in routes:
-            lat, lon = route.midpoint()
-            forecast = WeatherDataManager.fetch_day_forecast(lat,lon,start_date)
-            weathers.append(WeatherData(
-                date_str        = forecast["date"],
-                location_id     = route.region,
-                avg_temp        = forecast["avg_temp"],
-                min_temp        = forecast["min_temp"],
-                max_temp        = forecast["max_temp"],
-                precipitation   = forecast["precipitation"],
-                sunshine_hours  = forecast["sunshine_hours"],
-                cloud_cover     = forecast["cloud_cover"],
-            ))
-        
-        return weathers
-
-    @staticmethod
-    def fetch_day_forecast(lat: float, lon: float, date) -> dict:
-        '''
-        Fetches the next-24h hourly forecast for (lat, lon) and
-        returns a single dict with keys:
-          date, location_id, avg_temp, precipitation,
-          cloud_cover, sunshine_hours
-        '''
+        lat, lon = route.midpoint()
 
         url = (
             "https://api.open-meteo.com/v1/forecast"
@@ -61,16 +34,19 @@ class WeatherDataManager:
         suns  = hourly["sunshine_duration"]
         clouds = hourly["cloud_cover"]      
 
-        return {
-            "date":           hourly["time"][0].split("T")[0],
-            "location_id":    f"{lat},{lon}",
-            "avg_temp":       round(sum(temps) / len(temps), 1),
-            "min_temp":       round(min(temps), 1),
-            "max_temp":       round(max(temps), 1),
-            "precipitation":  round(sum(precs), 1),
-            "sunshine_hours": round(sum(suns)/3600, 2),
-            "cloud_cover":    round(sum(clouds) / len(clouds), 1),
-        }
+        weather = WeatherData (
+            date =           hourly["time"][0].split("T")[0],
+            location_lat=   lat,
+            location_lon=   lon,
+            avg_temp=       round(sum(temps) / len(temps), 1),
+            min_temp=       round(min(temps), 1),
+            max_temp=       round(max(temps), 1),
+            precipitation=  round(sum(precs), 1),
+            sunshine_hours= round(sum(suns)/3600, 2),
+            cloud_cover=    round(sum(clouds) / len(clouds), 1),
+            route_id=       route.id
+        )
+        return weather
 
     @staticmethod
     def weather_statistic(route: Route):

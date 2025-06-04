@@ -3,19 +3,20 @@
 from datetime import date
 
 class WeatherData:
-    def __init__(self, *, date_str, location_id,
+    def __init__(self, *, date_str, location_lat, location_lon,
                  avg_temp, min_temp, max_temp,
-                 precipitation, sunshine_hours, cloud_cover):
+                 precipitation, sunshine_hours, cloud_cover, route_id=None):
         self._id              = None
         self._date            = date.fromisoformat(date_str)
-        self._location_id     = location_id
+        self._location_lat    = location_lat
+        self._location_lon    = location_lon
         self._avg_temp        = float(avg_temp)
         self._min_temp        = float(min_temp)
         self._max_temp        = float(max_temp)
         self._precipitation   = float(precipitation)
         self._sunshine_hours  = float(sunshine_hours)
         self._cloud_cover     = float(cloud_cover)
-        self._route_id        = None
+        self._route_id        = int(route_id)
 
     def is_sunny(self) -> bool:
         return self._cloud_cover < 30
