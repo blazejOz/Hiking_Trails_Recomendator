@@ -1,5 +1,11 @@
 from src.database.migration_tool import MigrationTool
-
+from src.models.user_preference import UserPreference
+from src.models.route import Route
+from src.models.weather_data import WeatherData
+from src.recommenders.route_recommender import RouteRecommender
+from src.database.repositories.user_repository import UserRepository
+from src.database.repositories.route_repository import RouteRepository
+from src.database.repositories.weather_repository import WeatherRepository
 
 def main_menu():
     while True:
@@ -17,8 +23,7 @@ def main_menu():
         elif choice == '2':
             add_new_route()
         elif choice == '3':
-            pass
-            #show_database_statistics()
+            show_database_statistics()
         elif choice == '4':
             pass
             #create_backup()
@@ -43,10 +48,6 @@ def find_recommended_routes():
         new_search()
 
 def new_search():
-    from src.models.user_preference import UserPreference
-    from src.database.repositories.user_repository import UserRepository
-    from src.database.repositories.route_repository import RouteRepository
-    from src.database.repositories.weather_repository import WeatherRepository
 
     user_name = input("Podaj nazwę użytkownika: ")
     temp_min = float(input("Podaj minimalną preferowaną temperaturę (°C): "))
@@ -67,11 +68,7 @@ def new_search():
     routes = RouteRepository.get_all_routes()
     weather_data = WeatherRepository.get_all_weather_data()
 
-    route_weather_pairs = []
-    
-    for route, weather in zip(routes, weather_data):
-        if new_user.matches_route(route) and new_user.matches_weather(weather):
-            route_weather_pairs.append((route, weather))
+    route_weather_pairs = RouteRecommender.recommend(routes, weather_data, new_user)    
     
     if not route_weather_pairs:
         print("Brak tras spełniających kryteria.")
@@ -79,8 +76,6 @@ def new_search():
         print_routes(route_weather_pairs)
 
 def add_new_route():
-    from src.models.route import Route
-    from src.database.repositories.route_repository import RouteRepository
 
     print("=== Dodaj nową trasę ===")
     name = input("Nazwa trasy: ")
@@ -99,6 +94,7 @@ def add_new_route():
     tags = input("Tagi (oddzielone przecinkami): ").split(',')
 
     new_route = Route(
+        id=None,  # ID will be assigned by the database
         name=name,
         region=region,
         start_lat=start_lat,
@@ -113,6 +109,16 @@ def add_new_route():
     )
     RouteRepository.add_route(new_route)
     print(f"Trasa '{name}' została dodana pomyślnie.")
+
+def show_database_statistics():
+    print("=== Statystyki bazy danych ===")
+    user_count = UserRepository.get_user_count()
+    route_count = RouteRepository.get_route_count()
+    weather_count = WeatherRepository.get_weather_data_count()
+
+    print(f"Liczba użytkowników: {user_count}")
+    print(f"Liczba tras: {route_count}")
+    print(f"Liczba danych pogodowych: {weather_count}")
 
 def print_routes(route_weather_pairs):
     print("\n=== Lista rekomendowanych tras ===")

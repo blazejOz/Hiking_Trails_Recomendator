@@ -55,3 +55,15 @@ class RouteRepository:
             routes.append(route)
         
         return routes
+    
+    @staticmethod
+    def get_route_count() -> int:
+        """
+        Get the total number of routes in the database.
+        """
+        conn = DatabaseManager.connect()
+        cursor = conn.cursor()
+        cursor.execute("SELECT COUNT(*) FROM routes")
+        count = cursor.fetchone()[0]
+        conn.close()
+        return count

@@ -54,3 +54,15 @@ class WeatherRepository:
             ))
         
         return weather_data_list
+    
+    @staticmethod
+    def get_weather_data_count() -> int:
+        """
+        Get the count of weather data entries in the database.
+        """
+        conn = DatabaseManager.connect()
+        cursor = conn.cursor()
+        cursor.execute("SELECT COUNT(*) FROM weather_data")
+        count = cursor.fetchone()[0]
+        conn.close()
+        return count

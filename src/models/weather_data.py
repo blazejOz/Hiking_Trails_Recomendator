@@ -3,10 +3,10 @@
 from datetime import date
 
 class WeatherData:
-    def __init__(self, *,id = None, date, location_lat, location_lon,
+    def __init__(self, *, id, date, location_lat, location_lon,
                  avg_temp, min_temp, max_temp,
                  precipitation, sunshine_hours, cloud_cover, route_id=None):
-        self._id              = int(id)
+        self._id              = int(id) if id is not None else None
         self._date            = date
         self._location_lat    = location_lat
         self._location_lon    = location_lon

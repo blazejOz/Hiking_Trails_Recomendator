@@ -58,3 +58,17 @@ class UserRepository:
             )
         else:
             return None
+        
+    @staticmethod
+    def get_user_count() -> int:
+        """
+        Get the total number of users in the database.
+        """
+        conn = DatabaseManager.connect()
+        cursor = conn.cursor()
+        
+        cursor.execute("SELECT COUNT(*) FROM user_preferences")
+        count = cursor.fetchone()[0]
+        
+        conn.close()
+        return count

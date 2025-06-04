@@ -35,6 +35,7 @@ class WeatherDataManager:
         clouds = hourly["cloud_cover"]      
 
         weather = WeatherData (
+            id=             None,  # ID will be set by the database
             date =          forecast_date,
             location_lat=   lat,
             location_lon=   lon,

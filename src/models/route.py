@@ -1,9 +1,9 @@
 class Route:
-    def __init__(self, *, id=None, name, region, 
+    def __init__(self, *, id, name, region, 
                  start_lat, start_lon, end_lat, end_lon, 
                  length_km, elevation_gain,
                  difficulty, terrain_type, tags):
-        self._id = int(id)
+        self._id = int(id) if id is not None else None
         self._name = name
         self._region = region
         self._start_lat = float(start_lat)
