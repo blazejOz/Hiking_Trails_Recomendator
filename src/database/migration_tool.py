@@ -38,7 +38,7 @@ class MigrationTool:
         weathers = []
         for route in routes:
             try:
-                weather_data = WeatherDataManager.fetch_day_forecast(route)
+                weather_data = WeatherDataManager.fetch_date_forecast(route)
                 weathers.append(weather_data)
                 print(f"Weather data for route '{route.name}' fetched successfully.")
             except Exception as e:

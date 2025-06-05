@@ -8,7 +8,7 @@ class WeatherDataManager:
 
 
     @staticmethod
-    def fetch_day_forecast(route: Route, forecast_date: str = None) -> WeatherData:
+    def fetch_date_forecast(route: Route, forecast_date: str = None) -> WeatherData:
         '''
         Fetches the next-24h hourly forecast for Route.midpoint(lat, lon)
         '''

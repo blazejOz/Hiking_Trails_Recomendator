@@ -1,3 +1,5 @@
+from datetime import datetime
+from src.data_handlers.weather_data_manager import WeatherDataManager
 from src.database.migration_tool import MigrationTool
 from src.models.user_preference import UserPreference
 from src.models.route import Route
@@ -30,7 +32,7 @@ def main_menu():
         elif choice == '5':
             print("Importowanie danych z pliku CSV...")
             routes = MigrationTool.migrate_routes()
-            MigrationTool.migrate_weather_data(routes)
+            #MigrationTool.migrate_weather_data(routes)
         elif choice == '0':
             print("Dziękujemy za skorzystanie z aplikacji!")
             break
@@ -48,15 +50,29 @@ def find_recommended_routes():
         new_search()
 
 def new_search():
+    user_name = input("Podaj nazwę użytkownika: ") or 'default'
+    temp_min_input = input("Podaj minimalną preferowaną temperaturę (°C): ")
+    temp_min = float(temp_min_input) if temp_min_input else 10.0
 
-    user_name = input("Podaj nazwę użytkownika: ")
-    temp_min = float(input("Podaj minimalną preferowaną temperaturę (°C): "))
-    temp_max = float(input("Podaj maksymalną preferowaną temperaturę (°C): "))
-    max_precipitation = float(input("Podaj maksymalną ilość opadów (mm): "))
-    max_difficulty = int(input("Podaj maksymalny poziom trudności (1-5): "))
-    max_length = float(input("Podaj maksymalną długość trasy (km): "))
+    temp_max_input = input("Podaj maksymalną preferowaną temperaturę (°C): ")
+    temp_max = float(temp_max_input) if temp_max_input else 30.0
 
-    forecast_date = input("Podaj datę prognozy (YYYY-MM-DD): ")
+    max_precipitation_input = input("Podaj maksymalną ilość opadów (mm): ")
+    max_precipitation = float(max_precipitation_input) if max_precipitation_input else 10.0
+
+    max_difficulty_input = input("Podaj maksymalny poziom trudności (1-5): ")
+    max_difficulty = int(max_difficulty_input) if max_difficulty_input else 3
+
+    max_length_input = input("Podaj maksymalną długość trasy (km): ")
+    max_length = float(max_length_input) if max_length_input else 20.0
+
+    # Ask for MM-DD and build a date string with the current year
+    mmdd = input("Podaj datę prognozy (MM-DD): ")
+    if mmdd:
+        current_year = datetime.now().year
+        searched_forecast_date = f"{current_year}-{mmdd}"
+    else:
+        searched_forecast_date = None
 
     new_user = UserPreference(
         user_name=user_name,
@@ -64,22 +80,16 @@ def new_search():
         preferred_temp_max=temp_max,
         max_precipitation=max_precipitation,
         max_difficulty=max_difficulty,
-        max_length_km=max_length
-    ) 
-
-    routes = RouteRepository.get_filtered_routes(
-        max_difficulty=max_difficulty,
-        max_length_km=max_length
-    )
-    print(f"Znaleziono {len(routes)} tras spełniających kryteria.")
-    # weather_data = 
-
+        max_length_km=max_length,
+        forecast_date=searched_forecast_date )
     
-    
-    # if not route_weather_pairs:
-    #     print("Brak tras spełniających kryteria.")
-    # else:
-    #     print_routes(route_weather_pairs)
+
+    route_weather_pairs = RouteRecommender.recommend(new_user)
+
+    if not route_weather_pairs:
+        print("Brak tras spełniających kryteria.")
+    else:
+        print_routes(route_weather_pairs)
 
 def add_new_route():
 
