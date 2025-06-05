@@ -56,6 +56,8 @@ def new_search():
     max_difficulty = int(input("Podaj maksymalny poziom trudności (1-5): "))
     max_length = float(input("Podaj maksymalną długość trasy (km): "))
 
+    forecast_date = input("Podaj datę prognozy (YYYY-MM-DD): ")
+
     new_user = UserPreference(
         user_name=user_name,
         preferred_temp_min=temp_min,
@@ -65,15 +67,19 @@ def new_search():
         max_length_km=max_length
     ) 
 
-    routes = RouteRepository.get_all_routes()
-    weather_data = WeatherRepository.get_all_weather_data()
+    routes = RouteRepository.get_filtered_routes(
+        max_difficulty=max_difficulty,
+        max_length_km=max_length
+    )
+    print(f"Znaleziono {len(routes)} tras spełniających kryteria.")
+    # weather_data = 
 
-    route_weather_pairs = RouteRecommender.recommend(routes, weather_data, new_user)    
     
-    if not route_weather_pairs:
-        print("Brak tras spełniających kryteria.")
-    else:
-        print_routes(route_weather_pairs)
+    
+    # if not route_weather_pairs:
+    #     print("Brak tras spełniających kryteria.")
+    # else:
+    #     print_routes(route_weather_pairs)
 
 def add_new_route():
 

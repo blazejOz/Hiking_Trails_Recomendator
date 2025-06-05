@@ -1,3 +1,4 @@
+from src.models.route import Route
 from src.models.weather_data import WeatherData
 from src.database.database_manager import DatabaseManager
 
@@ -55,6 +56,28 @@ class WeatherRepository:
         
         return weather_data_list
     
+    @staticmethod
+    def get_weather_data_by_route(route_id: int) -> list[WeatherData]:
+        pass
+
+    staticmethod
+    def check_weather_data_exists(date: str, route:Route ) -> bool:
+        """
+        Check if weather data for a specific date and location already exists in the database.
+        """
+        conn = DatabaseManager.connect()
+        cursor = conn.cursor()
+        cursor.execute(
+            """
+            SELECT COUNT(*) FROM weather_data
+            WHERE date = ? AND route_id = ?
+            """,
+            (date, route.id)
+        )
+        exists = cursor.fetchone()[0] > 0
+        conn.close()
+        return exists
+
     @staticmethod
     def get_weather_data_count() -> int:
         """

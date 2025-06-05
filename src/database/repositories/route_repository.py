@@ -57,6 +57,45 @@ class RouteRepository:
         return routes
     
     @staticmethod
+    def get_filtered_routes(
+        max_difficulty: int, max_length_km: float
+    ) -> list[Route]:
+        """
+        Retrieve routes filtered by weather and user preferences.
+        """
+        conn = DatabaseManager.connect()
+        cursor = conn.cursor()
+        cursor.execute(
+            """
+            SELECT * FROM routes
+            WHERE difficulty <= ? AND length_km <= ?
+            """,
+            (max_difficulty, max_length_km)
+        )
+        rows = cursor.fetchall()
+        conn.close()
+        
+        filtered_routes = []
+        for row in rows:
+            route = Route(
+                id=row[0],
+                name=row[1],
+                region=row[2],
+                start_lat=row[3],
+                start_lon=row[4],
+                end_lat=row[5],
+                end_lon=row[6],
+                length_km=row[7],
+                elevation_gain=row[8],
+                difficulty=row[9],
+                terrain_type=row[10],
+                tags=row[11].split(',') if row[11] else []
+            )
+            filtered_routes.append(route)
+        
+        return filtered_routes
+
+    @staticmethod
     def get_route_count() -> int:
         """
         Get the total number of routes in the database.
