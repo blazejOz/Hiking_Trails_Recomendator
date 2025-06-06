@@ -79,7 +79,6 @@ class UserPreference():
     @property
     def preferred_terrain(self) -> str:
         return self._preferred_terrain_types
-    
     @property
     def forecast_date(self) -> str:
         return self._forecast_date

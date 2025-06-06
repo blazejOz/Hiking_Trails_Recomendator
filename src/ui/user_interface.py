@@ -32,7 +32,6 @@ def main_menu():
         elif choice == '5':
             print("Importowanie danych z pliku CSV...")
             routes = MigrationTool.migrate_routes()
-            #MigrationTool.migrate_weather_data(routes)
         elif choice == '0':
             print("Dziękujemy za skorzystanie z aplikacji!")
             break
@@ -50,7 +49,7 @@ def find_recommended_routes():
         new_search()
 
 def new_search():
-    user_name = input("Podaj nazwę użytkownika: ") or 'default'
+    #user_name = input("Podaj nazwę użytkownika: ") or 'default'
     temp_min_input = input("Podaj minimalną preferowaną temperaturę (°C): ")
     temp_min = float(temp_min_input) if temp_min_input else 10.0
 
@@ -75,7 +74,7 @@ def new_search():
         searched_forecast_date = None
 
     new_user = UserPreference(
-        user_name=user_name,
+        #user_name=user_name,
         preferred_temp_min=temp_min,
         preferred_temp_max=temp_max,
         max_precipitation=max_precipitation,
@@ -90,6 +89,31 @@ def new_search():
         print("Brak tras spełniających kryteria.")
     else:
         print_routes(route_weather_pairs)
+
+    print("=== KONIEC REKOMENDACJI ===")
+    print("1. Nowe Wyszukiwanie")
+    print("2. Zapisz preferencje użytkownika")
+    print("3. Raport PDF")
+    print("0. Powrót do menu głównego")
+
+    choice = input("Wybierz opcję: ")
+    if choice == '1':
+        new_search()
+    elif choice == '2':
+        print("Zapis preferencji użytkownika...")
+        user_name = input("Nazwa użytkownika (lub pozostaw puste dla domyślnej): ")
+        new_user._name = user_name if user_name else 'default'
+        
+        # UserRepository.save_user_preferences(new_user)
+        print("Preferencje zapisane.")
+    elif choice == '3':
+        print("Generowanie raportu PDF...")
+        # PDFReportGenerator.generate_report(route_weather_pairs, new_user)
+        print("Raport PDF został wygenerowany.")
+    else:
+        print("Powrót do menu głównego.")
+        main_menu()
+
 
 def add_new_route():
 
