@@ -25,7 +25,15 @@ class UserPreference():
         self._preferred_terrain_types = preferred_terrain
         self._forecast_date = forecast_date
 
-
+    def __repr__(self):
+        return (f"Name = {self._name}, \n"
+                f"preferred_temp_min = {self._preferred_temp_min}, \n"
+                f"preferred_temp_max = {self._preferred_temp_max}, \n"
+                f"max_rain = {self._max_rain}, \n"
+                f"max_difficulty = {self._max_difficulty}, \n"
+                f"max_length_km = {self._max_length_km}, \n"
+                f"preferred_terrain = {self._preferred_terrain_types}, \n"
+                f"forecast_date = {self._forecast_date})\n")
 
     def matches_route(self, route:Route) -> bool:
         '''

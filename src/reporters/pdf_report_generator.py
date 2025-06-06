@@ -18,8 +18,12 @@ class PDFReportGenerator:
     def _header_footer(self, canvas, doc):
         canvas.saveState()
         canvas.setFont('Helvetica', 9)
-        canvas.drawString(30, 820, f"Raport tras turystycznych - {datetime.now().strftime('%Y-%m-%d')}")
-        canvas.drawRightString(570, 820, f"Strona {doc.page}")
+        page_width, page_height = A4
+        top_y = page_height - 30
+        canvas.drawString(30, top_y, f"Raport tras turystycznych - {datetime.now().strftime('%Y-%m-%d')}")
+
+        bottom_y = 30
+        canvas.drawRightString(page_width -30 , bottom_y, f"Strona {doc.page}")
         canvas.restoreState()
 
     def generate(self, filename):
@@ -31,7 +35,7 @@ class PDFReportGenerator:
         elements.append(Spacer(1, 20))
         elements.append(Paragraph(f"Data generowania: {datetime.now().strftime('%Y-%m-%d %H:%M')}", self.styles['Normal']))
         if self.user_pref:
-            elements.append(Paragraph(f"Parametry wyszukiwania: {self.user_pref.__dict__}", self.styles['Normal']))
+            elements.append(Paragraph(f"Parametry wyszukiwania: {self.user_pref}", self.styles['Normal']))
         elements.append(PageBreak())
 
         # Spis treści (prosty)
