@@ -14,11 +14,11 @@ class RouteRecommender:
         routes = RouteRepository.get_all_routes()
         weather_data = []
         for route in routes:
-            if WeatherRepository.check_weather_data_exists(user.forecast_date, route):
-                weather = WeatherRepository.get_weather_data_by_route(route.id, user.forecast_date)
+            if WeatherRepository.check_weather_data_exists(user.forecast_date, route.id):
+                weather = WeatherRepository.get_weather_data_by_route(user.forecast_date, route.id)
                 weather_data.append(weather)
             else:
-                weather = WeatherDataManager.fetch_date_forecast(route, user.forecast_date)
+                weather = WeatherDataManager.fetch_date_forecast(route.id, user.forecast_date)
                 WeatherRepository.add_weather_data(weather)
                 weather_data.append(weather)
         

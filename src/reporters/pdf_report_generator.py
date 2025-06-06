@@ -4,7 +4,6 @@ from reportlab.lib.styles import getSampleStyleSheet
 from reportlab.lib import colors
 from reportlab.pdfgen import canvas
 from datetime import datetime
-import matplotlib.pyplot as plt
 import tempfile
 import os
 

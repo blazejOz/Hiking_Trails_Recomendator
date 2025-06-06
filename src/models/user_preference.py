@@ -60,7 +60,12 @@ class UserPreference():
 
     @property
     def name(self) -> str:
-        return self._name   
+        return self._name
+    @name.setter
+    def name(self, value: str):
+        if not isinstance(value, str) or not value.strip():
+            raise ValueError("User name must be a non-empty string")
+        self._name = value.strip()   
     @property
     def preferred_temp_min(self) -> float:
         return self._preferred_temp_min

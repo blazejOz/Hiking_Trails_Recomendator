@@ -74,7 +74,7 @@ def new_search():
         searched_forecast_date = None
 
     new_user = UserPreference(
-        #user_name=user_name,
+        user_name='default',
         preferred_temp_min=temp_min,
         preferred_temp_max=temp_max,
         max_precipitation=max_precipitation,
@@ -90,6 +90,9 @@ def new_search():
     else:
         print_routes(route_weather_pairs)
 
+    end_search(route_weather_pairs, new_user)
+
+def end_search(route_weather_pairs, new_user):
     print("=== KONIEC REKOMENDACJI ===")
     print("1. Nowe Wyszukiwanie")
     print("2. Zapisz preferencje użytkownika")
@@ -102,8 +105,15 @@ def new_search():
     elif choice == '2':
         print("Zapis preferencji użytkownika...")
         user_name = input("Nazwa użytkownika (lub pozostaw puste dla domyślnej): ")
-        new_user._name = user_name if user_name else 'default'
-        
+        new_user.name = user_name if user_name else 'default'
+
+        if UserRepository.check_user_exists(new_user.name):
+            UserRepository.update_user_preference(new_user)
+            print(f"Preferencje użytkownika '{new_user.name}' zostały zaktualizowane.")
+        else:
+            UserRepository.add_user_preference(new_user)
+            print(f"Preferencje użytkownika '{new_user.name}' zostały zapisane.")
+
         # UserRepository.save_user_preferences(new_user)
         print("Preferencje zapisane.")
     elif choice == '3':
@@ -113,7 +123,6 @@ def new_search():
     else:
         print("Powrót do menu głównego.")
         main_menu()
-
 
 def add_new_route():
 

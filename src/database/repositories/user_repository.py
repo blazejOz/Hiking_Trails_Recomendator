@@ -19,7 +19,7 @@ class UserRepository:
             INSERT INTO user_preferences (user_name, preferred_temp_min, preferred_temp_max, max_precipitation, max_difficulty, max_length_km, preferred_terrain_types)
             VALUES (?, ?, ?, ?, ?, ?, ?)
             """,
-            (user_preference._name, user_preference._preferred_temp_min,
+            (user_preference.name, user_preference._preferred_temp_min,
              user_preference._preferred_temp_max, user_preference._max_rain,
              user_preference._max_difficulty, user_preference._max_length_km,
              user_preference._preferred_terrain_types)
@@ -58,7 +58,50 @@ class UserRepository:
             )
         else:
             return None
+
+    @staticmethod
+    def check_user_exists(user_name: str) -> bool:
+        """
+        Check if a user exists in the database.
+        """
+        conn = DatabaseManager.connect()
+        cursor = conn.cursor()
         
+        cursor.execute(
+            """
+            SELECT COUNT(*) FROM user_preferences WHERE user_name = ?
+            """,
+            (user_name,)
+        )
+        
+        exists = cursor.fetchone()[0] > 0
+        conn.close()
+        
+        return exists
+
+    @staticmethod
+    def update_user_preference(user_preference: UserPreference):
+        """
+        Update existing user preferences in the database.
+        """
+        conn = DatabaseManager.connect()
+        cursor = conn.cursor()
+        
+        cursor.execute(
+            """
+            UPDATE user_preferences
+            SET preferred_temp_min = ?, preferred_temp_max = ?, max_precipitation = ?, max_difficulty = ?, max_length_km = ?, preferred_terrain_types = ?
+            WHERE user_name = ?
+            """,
+            (user_preference._preferred_temp_min, user_preference._preferred_temp_max,
+             user_preference._max_rain, user_preference._max_difficulty,
+             user_preference._max_length_km, user_preference._preferred_terrain_types,
+             user_preference.name)
+        )
+        
+        conn.commit()
+        conn.close()
+
     @staticmethod
     def get_user_count() -> int:
         """

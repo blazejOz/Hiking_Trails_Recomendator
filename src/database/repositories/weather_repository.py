@@ -57,11 +57,42 @@ class WeatherRepository:
         return weather_data_list
     
     @staticmethod
-    def get_weather_data_by_route(route_id: int) -> list[WeatherData]:
-        pass
+    def get_weather_data_by_route(date: str, route_id: int) -> WeatherData:
+        """
+        Retrieve weather data for a specific date and route from the database.
+        """
+        conn = DatabaseManager.connect()
+        cursor = conn.cursor()
+        cursor.execute(
+            """
+            SELECT * FROM weather_data
+            WHERE date = ? AND route_id = ?
+            """,
+            (date, route_id)
+        )
+        row = cursor.fetchone()
+        conn.close()
+        
+        if row:
+            return WeatherData(
+                id=row[0],
+                date=row[1],
+                location_lat=row[2],
+                location_lon=row[3],
+                avg_temp=row[4],
+                min_temp=row[5],
+                max_temp=row[6],
+                precipitation=row[7],
+                sunshine_hours=row[8],
+                cloud_cover=row[9],
+                route_id=row[10]
+            )
+        else:
+            return None
+        
 
-    staticmethod
-    def check_weather_data_exists(date: str, route:Route ) -> bool:
+    @staticmethod
+    def check_weather_data_exists(date: str, route_id ) -> bool:
         """
         Check if weather data for a specific date and location already exists in the database.
         """
@@ -72,7 +103,7 @@ class WeatherRepository:
             SELECT COUNT(*) FROM weather_data
             WHERE date = ? AND route_id = ?
             """,
-            (date, route.id)
+            (date, route_id)
         )
         exists = cursor.fetchone()[0] > 0
         conn.close()
