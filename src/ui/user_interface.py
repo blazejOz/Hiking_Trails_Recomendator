@@ -120,8 +120,10 @@ def end_search(route_weather_pairs, new_user):
             print("Preferencje zapisane.")
         elif choice == '3':
             print("Generowanie raportu PDF...")
-            pdgreport = PDFReportGenerator(route_weather_pairs[0], route_weather_pairs[1] , new_user)
-            pdgreport.generate_report()
+            routes = [pair[0] for pair in route_weather_pairs]
+            weather_data = [pair[1] for pair in route_weather_pairs]
+            pdgreport = PDFReportGenerator(routes, weather_data , new_user)
+            pdgreport.generate(f"raport_rekomendacji_{new_user.name}.pdf")
             print("Raport PDF został wygenerowany.")
         elif choice == '0':
             print("Powrót do menu głównego.")

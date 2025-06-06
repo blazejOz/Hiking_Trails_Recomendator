@@ -1,15 +1,12 @@
 from reportlab.lib.pagesizes import A4
-from reportlab.platypus import SimpleDocTemplate, Paragraph, Spacer, Table, TableStyle, PageBreak
+from reportlab.platypus import SimpleDocTemplate, Paragraph, Spacer, Table, TableStyle, PageBreak, Image
 from reportlab.lib.styles import getSampleStyleSheet
 from reportlab.lib import colors
 from reportlab.pdfgen import canvas
 from datetime import datetime
-import tempfile
 import os
 
 from src.reporters.chart_generator import ChartGenerator
-
-
 
 class PDFReportGenerator:
     def __init__(self, routes, weather_data, user_pref=None):
@@ -63,16 +60,14 @@ class PDFReportGenerator:
 
         # Wykresy
         elements.append(Paragraph("Wykresy porównawcze", self.styles['Heading2']))
-        with tempfile.TemporaryDirectory() as tmpdir:
-            bar_path = os.path.join(tmpdir, "bar_chart.png")
-            pie_path = os.path.join(tmpdir, "pie_chart.png")
-            ChartGenerator.bar_chart(self.routes, bar_path)
-            ChartGenerator.pie_chart(self.routes, pie_path)
-            from reportlab.platypus import Image
-            elements.append(Paragraph("Histogram długości tras", self.styles['Heading3']))
-            elements.append(Image(bar_path, width=400, height=200))
-            elements.append(Paragraph("Wykres kołowy kategorii tras", self.styles['Heading3']))
-            elements.append(Image(pie_path, width=300, height=300))
+        bar_path = "bar_chart.png"
+        pie_path = "pie_chart.png"
+        ChartGenerator.bar_chart(self.routes, bar_path)
+        ChartGenerator.pie_chart(self.routes, pie_path)
+        elements.append(Paragraph("Histogram długości tras", self.styles['Heading3']))
+        elements.append(Image(bar_path, width=400, height=200))
+        elements.append(Paragraph("Wykres kołowy kategorii tras", self.styles['Heading3']))
+        elements.append(Image(pie_path, width=300, height=300))
         elements.append(PageBreak())
 
         # Tabela zbiorcza
@@ -92,8 +87,11 @@ class PDFReportGenerator:
         elements.append(table)
         elements.append(PageBreak())
 
-        # Aneks
-        elements.append(Paragraph("Aneks z danymi źródłowymi", self.styles['Heading2']))
-        elements.append(Paragraph("Tu możesz dodać szczegółowe dane lub źródła.", self.styles['Normal']))
-
         doc.build(elements, onFirstPage=self._header_footer, onLaterPages=self._header_footer)
+
+        # Usuń pliki wykresów po wygenerowaniu PDF
+        try:
+            os.remove(bar_path)
+            os.remove(pie_path)
+        except Exception:
+            pass
