@@ -8,6 +8,7 @@ from src.recommenders.route_recommender import RouteRecommender
 from src.database.repositories.user_repository import UserRepository
 from src.database.repositories.route_repository import RouteRepository
 from src.database.repositories.weather_repository import WeatherRepository
+from src.reporters.pdf_report_generator import PDFReportGenerator
 
 def main_menu():
     while True:
@@ -93,36 +94,40 @@ def new_search():
     end_search(route_weather_pairs, new_user)
 
 def end_search(route_weather_pairs, new_user):
-    print("=== KONIEC REKOMENDACJI ===")
-    print("1. Nowe Wyszukiwanie")
-    print("2. Zapisz preferencje użytkownika")
-    print("3. Raport PDF")
-    print("0. Powrót do menu głównego")
+    while True:
+        print("=== KONIEC REKOMENDACJI ===")
+        print("1. Nowe Wyszukiwanie")
+        print("2. Zapisz preferencje użytkownika")
+        print("3. Raport PDF")
+        print("0. Powrót do menu głównego")
 
-    choice = input("Wybierz opcję: ")
-    if choice == '1':
-        new_search()
-    elif choice == '2':
-        print("Zapis preferencji użytkownika...")
-        user_name = input("Nazwa użytkownika (lub pozostaw puste dla domyślnej): ")
-        new_user.name = user_name if user_name else 'default'
+        choice = input("Wybierz opcję: ")
+        if choice == '1':
+            new_search()
+            break  # after new_search, exit this menu
+        elif choice == '2':
+            print("Zapis preferencji użytkownika...")
+            user_name = input("Nazwa użytkownika (lub pozostaw puste dla domyślnej): ")
+            new_user.name = user_name if user_name else 'default'
 
-        if UserRepository.check_user_exists(new_user.name):
-            UserRepository.update_user_preference(new_user)
-            print(f"Preferencje użytkownika '{new_user.name}' zostały zaktualizowane.")
+            if UserRepository.check_user_exists(new_user.name):
+                UserRepository.update_user_preference(new_user)
+                print(f"Preferencje użytkownika '{new_user.name}' zostały zaktualizowane.")
+            else:
+                UserRepository.add_user_preference(new_user)
+                print(f"Preferencje użytkownika '{new_user.name}' zostały zapisane.")
+
+            print("Preferencje zapisane.")
+        elif choice == '3':
+            print("Generowanie raportu PDF...")
+            PDFReportGenerator.generate_report(route_weather_pairs, new_user)
+            print("Raport PDF został wygenerowany.")
+        elif choice == '0':
+            print("Powrót do menu głównego.")
+            main_menu()
+            return
         else:
-            UserRepository.add_user_preference(new_user)
-            print(f"Preferencje użytkownika '{new_user.name}' zostały zapisane.")
-
-        # UserRepository.save_user_preferences(new_user)
-        print("Preferencje zapisane.")
-    elif choice == '3':
-        print("Generowanie raportu PDF...")
-        # PDFReportGenerator.generate_report(route_weather_pairs, new_user)
-        print("Raport PDF został wygenerowany.")
-    else:
-        print("Powrót do menu głównego.")
-        main_menu()
+            print("Nieprawidłowy wybór, spróbuj ponownie.")
 
 def add_new_route():
 
