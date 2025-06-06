@@ -1,5 +1,6 @@
 from datetime import date, datetime
 from src.data_handlers.weather_data_manager import WeatherDataManager
+from src.database.database_manager import DatabaseManager
 from src.database.migration_tool import MigrationTool
 from src.models.user_preference import UserPreference
 from src.models.route import Route
@@ -28,8 +29,9 @@ def main_menu():
         elif choice == '3':
             show_database_statistics()
         elif choice == '4':
-            pass
-            #create_backup()
+            print("Tworzenie kopii zapasowej bazy danych...")
+            backup_path = DatabaseManager.backup_database()
+            print(f"Kopia zapasowa została utworzona: {backup_path}")
         elif choice == '5':
             print("Importowanie danych z pliku CSV...")
             routes = MigrationTool.migrate_routes()
@@ -121,7 +123,6 @@ def load_user_preferences():
 
     search_routes(user)
 
-
 def search_routes(user):
     print()
     print("=== Wyszukiwanie tras ===")
@@ -133,7 +134,6 @@ def search_routes(user):
         print_routes(route_weather_pairs)
 
     end_search(route_weather_pairs, user)
-
 
 def end_search(route_weather_pairs, user):
     print("=== KONIEC REKOMENDACJI ===")
@@ -177,24 +177,84 @@ def save_user_preferences(new_user):
         UserRepository.add_user_preference(new_user)
         print(f"Preferencje użytkownika '{new_user.name}' zostały zapisane.")
 
-
 def add_new_route():
-
+    print()
     print("=== Dodaj nową trasę ===")
-    name = input("Nazwa trasy: ")
-    region = input("Region: ")
-    start_lat = float(input("Szerokość geograficzna startu: "))
-    start_lon = float(input("Długość geograficzna startu: "))
-    end_lat = float(input("Szerokość geograficzna końca: "))
-    end_lon = float(input("Długość geograficzna końca: "))
-    elevation_gain = int(input("Przewyższenie (m): "))
-    terrain_type = input("Typ terenu (forest, mountain, urban, lakeside): ")
-    if terrain_type not in ["forest", "mountain", "urban", "lakeside"]:
-        print("Nieprawidłowy typ terenu. Użyto domyślnego 'forrest'.")
-        terrain_type = "forrest"
-    length_km = float(input("Długość (km): "))
-    difficulty = int(input("Trudność (1-5): "))
-    tags = input("Tagi (oddzielone przecinkami): ").split(',')
+    name = input("Nazwa trasy: ").strip()
+    region = input("Region: ").strip()
+
+    # Walidacja współrzędnych
+    while True:
+        try:
+            start_lat = float(input("Szerokość geograficzna startu (-90 do 90): "))
+            if not -90 <= start_lat <= 90:
+                raise ValueError
+            break
+        except ValueError:
+            print("Podaj poprawną szerokość geograficzną (-90 do 90).")
+
+    while True:
+        try:
+            start_lon = float(input("Długość geograficzna startu (-180 do 180): "))
+            if not -180 <= start_lon <= 180:
+                raise ValueError
+            break
+        except ValueError:
+            print("Podaj poprawną długość geograficzną (-180 do 180).")
+
+    while True:
+        try:
+            end_lat = float(input("Szerokość geograficzna końca (-90 do 90): "))
+            if not -90 <= end_lat <= 90:
+                raise ValueError
+            break
+        except ValueError:
+            print("Podaj poprawną szerokość geograficzną (-90 do 90).")
+
+    while True:
+        try:
+            end_lon = float(input("Długość geograficzna końca (-180 do 180): "))
+            if not -180 <= end_lon <= 180:
+                raise ValueError
+            break
+        except ValueError:
+            print("Podaj poprawną długość geograficzną (-180 do 180).")
+
+    while True:
+        try:
+            elevation_gain = int(input("Przewyższenie (m, >=0): "))
+            if elevation_gain < 0:
+                raise ValueError
+            break
+        except ValueError:
+            print("Podaj nieujemną liczbę całkowitą.")
+
+    # Typ terenu
+    valid_terrain = ["forest", "mountain", "urban", "lakeside"]
+    terrain_type = input(f"Typ terenu {valid_terrain}: ").strip().lower()
+    if terrain_type not in valid_terrain:
+        print(f"Nieprawidłowy typ terenu. Użyto domyślnego '{valid_terrain[0]}'.")
+        terrain_type = valid_terrain[0]
+
+    while True:
+        try:
+            length_km = float(input("Długość (km, >0): "))
+            if length_km <= 0:
+                raise ValueError
+            break
+        except ValueError:
+            print("Podaj dodatnią liczbę.")
+
+    while True:
+        try:
+            difficulty = int(input("Trudność (1-5): "))
+            if not 1 <= difficulty <= 5:
+                raise ValueError
+            break
+        except ValueError:
+            print("Podaj liczbę od 1 do 5.")
+
+    tags = [tag.strip() for tag in input("Tagi (oddzielone przecinkami): ").split(',') if tag.strip()]
 
     new_route = Route(
         id=None,  # ID will be assigned by the database

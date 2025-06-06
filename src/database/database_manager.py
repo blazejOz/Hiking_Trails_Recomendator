@@ -1,11 +1,14 @@
+from datetime import datetime
 import sqlite3
 import os
 from src.models.route import Route
+from src.models.user_preference import UserPreference
 from src.models.weather_data import WeatherData
 
 BASE_DIR = os.path.dirname(__file__)
 DB_PATH = os.path.join(BASE_DIR,'..', '..', 'data', 'database', 'recommender.db')
 SCHEMA_PATH = os.path.join(BASE_DIR, '..', '..', 'sql', 'schema.sql')
+BACKUP_DIR = os.path.join(BASE_DIR,'..', '..', 'data', 'backups')
 
 class DatabaseManager:
 
@@ -27,6 +30,23 @@ class DatabaseManager:
             conn.executescript(f.read())
         conn.commit()
         conn.close()
+
+    @staticmethod
+    def backup_database():
+            """Create a backup of the database in BACKUPS_DIR with current date."""
+            if not os.path.exists(DB_PATH):
+                raise FileNotFoundError("Database does not exist.")
+            
+            os.makedirs(BACKUP_DIR, exist_ok=True)
+            date_str = datetime.now().strftime("%Y%m%d")
+            backup_filename = f"db_backup_{date_str}.sqlite3"
+            backup_path = os.path.join(BACKUP_DIR, backup_filename)
+            
+            with open(backup_path, 'wb') as backup_file:
+                with open(DB_PATH, 'rb') as db_file:
+                    backup_file.write(db_file.read())
+            
+            return backup_path
 
     @staticmethod
     def validate_route_data(route: Route):
@@ -52,14 +72,16 @@ class DatabaseManager:
             raise ValueError("Tags must be a list of strings")
 
     @staticmethod
-    def validate_weather_data(weather: WeatherData):
-        if not isinstance(weather, WeatherData):
-            raise TypeError("Expected a WeatherData instance")
-        if not isinstance(weather._date, str) or not weather._date:
-            raise ValueError("Date must be a non-empty string")
-        if not isinstance(weather._location_lat, (int, float)):
-            raise ValueError("Location latitude must be a number")
-        if not isinstance(weather._location_lon, (int, float)):
-            raise ValueError("Location longitude must be a number")
-       
+    def validate_user_preference_data(user: UserPreference):
+        if not isinstance(user, UserPreference):
+            raise TypeError("Expected a UserPreference instance")
+        if not isinstance(user._preferred_difficulty, int) or user._preferred_difficulty not in [1, 2, 3, 4, 5]:
+            raise ValueError("Preferred difficulty must be an integer between 1 and 5")
+        if not isinstance(user._max_length_km, (int, float)) or user._max_length_km <= 0:
+            raise ValueError("Maximum length must be a positive number")
+        if not isinstance(user.preferred_temp_min, (int, float)):
+            raise ValueError("Preferred minimum temperature must be a number")
+        if not isinstance(user.preferred_temp_max, (int, float)):
+            raise ValueError("Preferred maximum temperature must be a number")
+        
        
