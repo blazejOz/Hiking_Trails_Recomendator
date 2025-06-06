@@ -22,7 +22,6 @@ class MigrationTool:
         print(f"Found {len(routes)} routes to migrate from CSV.")
         for route in routes:
             try:
-                DatabaseManager.validate_route_data(route)
                 route_id = RouteRepository.add_route(route)
                 print(f"Route '{route.name}' added with ID {route_id}.")
                 success_count += 1

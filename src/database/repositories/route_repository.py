@@ -9,6 +9,7 @@ class RouteRepository:
         """
         Add a new route to the database.
         """
+        DatabaseManager.validate_route_data(route)
         conn = DatabaseManager.connect()
         cursor = conn.cursor()
         cursor.execute(

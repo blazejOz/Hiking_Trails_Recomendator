@@ -84,9 +84,15 @@ class PDFReportGenerator:
             ])
         table = Table(data, repeatRows=1)
         table.setStyle(TableStyle([
-            ('BACKGROUND', (0,0), (-1,0), colors.lightgrey),
-            ('GRID', (0,0), (-1,-1), 0.5, colors.grey),
-            ('FONT', (0,0), (-1,0), 'Helvetica-Bold')
+            ('FONTNAME',   (0,0), (-1,0), 'Helvetica-Bold'),
+            ('FONTSIZE',   (0,0), (-1,0), 10),       # header row
+            ('FONTSIZE',   (0,1), (-1,-1), 9),       # body rows
+            ('BACKGROUND',(0,0), (-1,0), colors.lightgrey),
+            ('GRID',       (0,0), (-1,-1), 0.5, colors.grey),
+            ('LEFTPADDING',(0,0),(-1,-1), 4),
+            ('RIGHTPADDING',(0,0),(-1,-1),4),
+            ('TOPPADDING', (0,0),(-1,-1), 2),
+            ('BOTTOMPADDING',(0,0),(-1,-1),2),
         ]))
         elements.append(table)
         elements.append(PageBreak())

@@ -106,17 +106,7 @@ def end_search(route_weather_pairs, new_user):
             new_search()
             break  # after new_search, exit this menu
         elif choice == '2':
-            print("Zapis preferencji użytkownika...")
-            user_name = input("Nazwa użytkownika (lub pozostaw puste dla domyślnej): ")
-            new_user.name = user_name if user_name else 'default'
-
-            if UserRepository.check_user_exists(new_user.name):
-                UserRepository.update_user_preference(new_user)
-                print(f"Preferencje użytkownika '{new_user.name}' zostały zaktualizowane.")
-            else:
-                UserRepository.add_user_preference(new_user)
-                print(f"Preferencje użytkownika '{new_user.name}' zostały zapisane.")
-
+            save_user_preferences(new_user)
             print("Preferencje zapisane.")
         elif choice == '3':
             print("Generowanie raportu PDF...")
@@ -131,6 +121,20 @@ def end_search(route_weather_pairs, new_user):
             return
         else:
             print("Nieprawidłowy wybór, spróbuj ponownie.")
+
+def save_user_preferences(new_user):
+    print("Zapis preferencji użytkownika...")
+    user_name = input("Nazwa użytkownika (lub pozostaw puste dla domyślnej): ")
+    new_user.name = user_name if user_name else 'default'
+
+    if UserRepository.check_user_exists(new_user.name):
+        UserRepository.update_user_preference(new_user)
+        print("Użytkownik istnieje, aktualizowanie preferencji...")
+        print(f"Preferencje użytkownika '{new_user.name}' zostały zaktualizowane.")
+    else:
+        UserRepository.add_user_preference(new_user)
+        print(f"Preferencje użytkownika '{new_user.name}' zostały zapisane.")
+
 
 def add_new_route():
 
