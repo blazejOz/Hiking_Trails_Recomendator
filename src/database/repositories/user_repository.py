@@ -9,23 +9,23 @@ class UserRepository:
     @staticmethod
     def add_user_preference(user_preference: UserPreference):
         """
-        Add or update user preferences in the database.
+        Add user preferences in the database.
         """
         conn = DatabaseManager.connect()
         cursor = conn.cursor()
         
         cursor.execute(
             """
-            INSERT INTO user_preferences (user_name, preferred_temp_min, preferred_temp_max, max_precipitation, max_difficulty, max_length_km, preferred_terrain_types)
-            VALUES (?, ?, ?, ?, ?, ?, ?)
+            INSERT INTO user_preferences (user_name, preferred_temp_min, preferred_temp_max, max_precipitation, max_difficulty, max_length_km)
+            VALUES (?, ?, ?, ?, ?, ?)
             """,
             (user_preference.name, user_preference._preferred_temp_min,
              user_preference._preferred_temp_max, user_preference._max_rain,
              user_preference._max_difficulty, user_preference._max_length_km,
-             user_preference._preferred_terrain_types)
+             )
         )
-        
         conn.commit()
+        user_preference._id = cursor.lastrowid  # Set the ID after insertion
         conn.close()
 
     @staticmethod
@@ -48,13 +48,13 @@ class UserRepository:
         
         if row:
             return UserPreference(
-                user_name=row[0],
-                preferred_temp_min=row[1],
-                preferred_temp_max=row[2],
-                max_precipitation=row[3],
-                max_difficulty=row[4],
-                max_length_km=row[5],
-                preferred_terrain_types=row[6]
+                id=row[0],
+                user_name=row[1],
+                preferred_temp_min=row[2],
+                preferred_temp_max=row[3],
+                max_precipitation=row[4],
+                max_difficulty=row[5],
+                max_length_km=row[6]
             )
         else:
             return None
@@ -90,12 +90,12 @@ class UserRepository:
         cursor.execute(
             """
             UPDATE user_preferences
-            SET preferred_temp_min = ?, preferred_temp_max = ?, max_precipitation = ?, max_difficulty = ?, max_length_km = ?, preferred_terrain_types = ?
+            SET preferred_temp_min = ?, preferred_temp_max = ?, max_precipitation = ?, max_difficulty = ?, max_length_km = ?,
             WHERE user_name = ?
             """,
             (user_preference._preferred_temp_min, user_preference._preferred_temp_max,
              user_preference._max_rain, user_preference._max_difficulty,
-             user_preference._max_length_km, user_preference._preferred_terrain_types,
+             user_preference._max_length_km,
              user_preference.name)
         )
         

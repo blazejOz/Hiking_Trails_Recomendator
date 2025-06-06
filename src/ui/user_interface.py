@@ -48,9 +48,18 @@ def find_recommended_routes():
     choice = input("Wybierz opcję: ")
     if choice == '1':
         new_search()
+    elif choice == '2':
+        load_user_preferences()
+    elif choice == '0':
+        print("Powrót do menu głównego.")
+        main_menu()
+    else:
+        print("Nieprawidłowy wybór, spróbuj ponownie.")
+        find_recommended_routes()
 
 def new_search():
-    #user_name = input("Podaj nazwę użytkownika: ") or 'default'
+    print()
+    print("=== Nowe Wyszukiwanie ===")
     temp_min_input = input("Podaj minimalną preferowaną temperaturę (°C): ")
     temp_min = float(temp_min_input) if temp_min_input else 10.0
 
@@ -75,55 +84,88 @@ def new_search():
         searched_forecast_date = date.today()
 
     new_user = UserPreference(
+        id=None,  # ID will be assigned by the database
         user_name='default',
         preferred_temp_min=temp_min,
         preferred_temp_max=temp_max,
         max_precipitation=max_precipitation,
         max_difficulty=max_difficulty,
         max_length_km=max_length,
-        forecast_date=searched_forecast_date )
+        forecast_date=searched_forecast_date)
     
+    search_routes(new_user)
+    
+def load_user_preferences():
+    print()
+    print("=== Wczytaj preferencje użytkownika ===")
+    user_name = input("Podaj nazwę użytkownika: ") or 'default'
+    if UserRepository.check_user_exists(user_name):
+        print(f"Wczytywanie preferencji użytkownika '{user_name}'...")
+        user = UserRepository.get_user_preference(user_name)
+    else:
+        print(f"Użytkownik '{user_name}' nie istnieje.")
+        print("1. Spróbuj ponownie")
+        print("2. Utwórz nowego użytkownika")
+        print("0. Powrót do menu głównego")
+        choice = input("Wybierz opcję: ")
+        if choice == '1':
+            load_user_preferences()
+        elif choice == '2':
+            new_search()
+        elif choice == '0':
+            print("Powrót do menu głównego.")
+            main_menu()
+        else:
+            print("Nieprawidłowy wybór, spróbuj ponownie.")
+            load_user_preferences()
 
-    route_weather_pairs = RouteRecommender.recommend(new_user)
+    search_routes(user)
+
+
+def search_routes(user):
+    print()
+    print("=== Wyszukiwanie tras ===")
+    route_weather_pairs = RouteRecommender.recommend(user)
 
     if not route_weather_pairs:
         print("Brak tras spełniających kryteria.")
     else:
         print_routes(route_weather_pairs)
 
-    end_search(route_weather_pairs, new_user)
+    end_search(route_weather_pairs, user)
 
-def end_search(route_weather_pairs, new_user):
-    while True:
-        print("=== KONIEC REKOMENDACJI ===")
-        print("1. Nowe Wyszukiwanie")
-        print("2. Zapisz preferencje użytkownika")
-        print("3. Raport PDF")
-        print("0. Powrót do menu głównego")
 
-        choice = input("Wybierz opcję: ")
-        if choice == '1':
-            new_search()
-            break  # after new_search, exit this menu
-        elif choice == '2':
-            save_user_preferences(new_user)
-            print("Preferencje zapisane.")
-        elif choice == '3':
-            print("Generowanie raportu PDF...")
-            routes = [pair[0] for pair in route_weather_pairs]
-            weather_data = [pair[1] for pair in route_weather_pairs]
-            pdgreport = PDFReportGenerator(routes, weather_data , new_user)
-            pdgreport.generate(f"raport_rekomendacji_{new_user.name}.pdf")
-            print("Raport PDF został wygenerowany.")
-        elif choice == '0':
-            print("Powrót do menu głównego.")
-            main_menu()
-            return
-        else:
-            print("Nieprawidłowy wybór, spróbuj ponownie.")
+def end_search(route_weather_pairs, user):
+    print("=== KONIEC REKOMENDACJI ===")
+    print("1. Nowe Wyszukiwanie")
+    print("2. Zapisz preferencje użytkownika")
+    print("3. Raport PDF")
+    print("0. Powrót do menu głównego")
+
+    choice = input("Wybierz opcję: ")
+    if choice == '1':
+        new_search()
+    elif choice == '2':
+        save_user_preferences(user)
+        print("Preferencje zapisane.")
+    elif choice == '3':
+        print("Generowanie raportu PDF...")
+        routes = [pair[0] for pair in route_weather_pairs]
+        weather_data = [pair[1] for pair in route_weather_pairs]
+        pdgreport = PDFReportGenerator(routes, weather_data , user)
+        pdgreport.generate(f"raport_rekomendacji_{user.name}.pdf")
+        print("Raport PDF został wygenerowany.")
+    elif choice == '0':
+        print("Powrót do menu głównego.")
+        main_menu()
+        return
+    else:
+        print("Nieprawidłowy wybór, spróbuj ponownie.")
+        end_search(route_weather_pairs, user)
 
 def save_user_preferences(new_user):
-    print("Zapis preferencji użytkownika...")
+    print()
+    print("=== Zapisz preferencje użytkownika ===")
     user_name = input("Nazwa użytkownika (lub pozostaw puste dla domyślnej): ")
     new_user.name = user_name if user_name else 'default'
 

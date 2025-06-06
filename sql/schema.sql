@@ -42,7 +42,6 @@ CREATE TABLE user_preferences (
     max_precipitation REAL,
     max_difficulty INTEGER,
     max_length_km REAL,
-    preferred_terrain_types TEXT,
     updated_at DATETIME DEFAULT CURRENT_TIMESTAMP
 );
 
