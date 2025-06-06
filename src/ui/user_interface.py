@@ -1,4 +1,4 @@
-from datetime import datetime
+from datetime import date, datetime
 from src.data_handlers.weather_data_manager import WeatherDataManager
 from src.database.migration_tool import MigrationTool
 from src.models.user_preference import UserPreference
@@ -72,7 +72,7 @@ def new_search():
         current_year = datetime.now().year
         searched_forecast_date = f"{current_year}-{mmdd}"
     else:
-        searched_forecast_date = None
+        searched_forecast_date = date.today()
 
     new_user = UserPreference(
         user_name='default',
@@ -120,7 +120,8 @@ def end_search(route_weather_pairs, new_user):
             print("Preferencje zapisane.")
         elif choice == '3':
             print("Generowanie raportu PDF...")
-            PDFReportGenerator.generate_report(route_weather_pairs, new_user)
+            pdgreport = PDFReportGenerator(route_weather_pairs[0], route_weather_pairs[1] , new_user)
+            pdgreport.generate_report()
             print("Raport PDF został wygenerowany.")
         elif choice == '0':
             print("Powrót do menu głównego.")
