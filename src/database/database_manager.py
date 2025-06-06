@@ -49,6 +49,23 @@ class DatabaseManager:
             return backup_path
 
     @staticmethod
+    def restore_database(backup_filename: str):
+        """
+        Restore the database from a given backup file in BACKUPS_DIR.
+        backup_filename: db_backup_YYYYMMDD.sqlite3
+        """
+        backup_path = os.path.join(BACKUP_DIR, backup_filename)
+        if not os.path.exists(backup_path):
+            raise FileNotFoundError(f"Backup '{backup_filename}' does not exist in {BACKUP_DIR}.")
+
+        # Overwrite the existing database
+        with open(backup_path, 'rb') as backup_file, open(DB_PATH, 'wb') as db_file:
+            db_file.write(backup_file.read())
+        
+        return DB_PATH
+
+
+    @staticmethod
     def validate_route_data(route: Route):
         if not isinstance(route, Route):
             raise TypeError("Expected a Route instance")

@@ -17,7 +17,7 @@ def main_menu():
         print("1. Znajdź rekomendowane trasy")
         print("2. Dodaj nową trasę")
         print("3. Statystyki bazy danych")
-        print("4. Utwórz kopię zapasową")
+        print("4. Utwórz/Wczytaj kopię zapasową")
         print("5. Importuj dane z CSV")
         print("0. Wyjście")
 
@@ -29,12 +29,9 @@ def main_menu():
         elif choice == '3':
             show_database_statistics()
         elif choice == '4':
-            print("Tworzenie kopii zapasowej bazy danych...")
-            backup_path = DatabaseManager.backup_database()
-            print(f"Kopia zapasowa została utworzona: {backup_path}")
+            backup()
         elif choice == '5':
-            print("Importowanie danych z pliku CSV...")
-            routes = MigrationTool.migrate_routes()
+            import_csv()
         elif choice == '0':
             print("Dziękujemy za skorzystanie z aplikacji!")
             break
@@ -283,6 +280,34 @@ def show_database_statistics():
     print(f"Liczba tras: {route_count}")
     print(f"Liczba danych pogodowych: {weather_count}")
 
+def backup():
+    print("=== backup manager ===")
+    print("1. Utwórz kopię zapasową bazy danych")
+    print("2. Przywróć bazę danych z kopii zapasowej")
+    print("0. Powrót do menu głównego")
+
+    choice = input("Wybierz opcję: ")
+    if choice == '1':
+        backup_path = DatabaseManager.create_backup()
+        print(f"Kopia zapasowa została utworzona: {backup_path}")
+    elif choice == '2':
+        backup_filename = input("Podaj nazwę pliku kopii zapasowej (np. db_backup_YYYYMMDD.sqlite3): ")
+        try:
+            restored_path = DatabaseManager.restore_database(backup_filename)
+            print(f"Baza danych została przywrócona z: {restored_path}")
+        except FileNotFoundError as e:
+            print(e)
+    elif choice == '0':
+        print("Powrót do menu głównego.")
+        main_menu()
+    else:
+        print("Nieprawidłowy wybór, spróbuj ponownie.")
+        backup()
+    
+def import_csv():
+    print("Importowanie danych z pliku CSV...")
+    routes = MigrationTool.migrate_routes()
+    
 def print_routes(route_weather_pairs):
     print("\n=== Lista rekomendowanych tras ===")
     for route, weather in route_weather_pairs:
