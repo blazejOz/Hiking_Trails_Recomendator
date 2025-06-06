@@ -6,7 +6,6 @@ from datetime import date
 
 class WeatherDataManager:
 
-
     @staticmethod
     def fetch_date_forecast(route: Route, forecast_date: str = None) -> WeatherData:
         '''

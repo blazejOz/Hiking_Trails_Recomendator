@@ -1,6 +1,7 @@
 import os
 from typing import List
 from src.data_handlers.route_data_manager import RouteDataManager
+from src.database.database_manager import DatabaseManager
 from src.database.repositories.route_repository import RouteRepository
 from src.data_handlers.weather_data_manager import WeatherDataManager
 from src.database.repositories.weather_repository import WeatherRepository
@@ -21,6 +22,7 @@ class MigrationTool:
         print(f"Found {len(routes)} routes to migrate from CSV.")
         for route in routes:
             try:
+                DatabaseManager.validate_route_data(route)
                 route_id = RouteRepository.add_route(route)
                 print(f"Route '{route.name}' added with ID {route_id}.")
                 success_count += 1
@@ -28,6 +30,7 @@ class MigrationTool:
                 print(f"Error adding route '{route.name}': {e}")
                 fail_count += 1
         print(f"Migration completed: {success_count} routes added successfully, {fail_count} failed.")
+        print()
         return routes
         
     @staticmethod
