@@ -1,3 +1,4 @@
+from typing import List
 from src.models.user_preference import UserPreference
 from src.database.database_manager import DatabaseManager
 
@@ -102,6 +103,19 @@ class UserRepository:
         conn.commit()
         conn.close()
 
+    @staticmethod
+    def print_all_users():
+        """
+        Print names off all available users
+        """
+        conn = DatabaseManager.connect()
+        cursor = conn.cursor()
+        cursor.execute("SELECT user_name FROM user_preferences")
+        rows = cursor.fetchall()
+
+        for row in rows:
+            print(row)
+        
     @staticmethod
     def get_user_count() -> int:
         """

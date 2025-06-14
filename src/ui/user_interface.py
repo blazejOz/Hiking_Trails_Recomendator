@@ -97,6 +97,8 @@ def new_search():
 def load_user_preferences():
     print()
     print("=== Wczytaj preferencje użytkownika ===")
+    print("Zapisani uzytkownicy:")
+    UserRepository.print_all_users()
     user_name = input("Podaj nazwę użytkownika: ") or 'default'
     if UserRepository.check_user_exists(user_name):
         print(f"Wczytywanie preferencji użytkownika '{user_name}'...")
