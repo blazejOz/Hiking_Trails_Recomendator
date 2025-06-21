@@ -3,6 +3,21 @@ class Route:
                  start_lat, start_lon, end_lat, end_lon, 
                  length_km, elevation_gain,
                  difficulty, terrain_type, tags):
+        
+        if float(length_km) <= 0:
+            raise ValueError("Długość trasy musi być dodatnia.")
+        if int(elevation_gain) < 0:
+            raise ValueError("Przewyższenie nie może być ujemne.")
+        if not (1 <= int(difficulty) <= 5):
+            raise ValueError("Trudność musi być w zakresie 1-5.")
+        if not (-90 <= float(start_lat) <= 90) or not (-90 <= float(end_lat) <= 90):
+            raise ValueError("Szerokość geograficzna musi być w zakresie -90 do 90.")
+        if not (-180 <= float(start_lon) <= 180) or not (-180 <= float(end_lon) <= 180):
+            raise ValueError("Długość geograficzna musi być w zakresie -180 do 180.")
+        valid_terrain = {"forest", "mountain", "urban", "lakeside"}
+        if terrain_type not in valid_terrain:
+            raise ValueError(f"Typ terenu musi być jednym z: {valid_terrain}")
+
         self._id = int(id) if id is not None else None
         self._name = name
         self._region = region

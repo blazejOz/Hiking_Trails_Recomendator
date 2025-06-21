@@ -16,6 +16,16 @@ class UserPreference():
                     max_difficulty: int = 3,
                     max_length_km: float = 20.0,
                     forecast_date: str = date.today()):
+        
+        if float(preferred_temp_min) > float(preferred_temp_max):
+            raise ValueError("Minimalna temperatura nie może być większa od maksymalnej.")
+        if float(max_precipitation) < 0:
+            raise ValueError("Maksymalna ilość opadów nie może być ujemna.")
+        if int(max_difficulty) < 1 or int(max_difficulty) > 5:
+            raise ValueError("Maksymalna trudność musi być w zakresie 1-5.")
+        if float(max_length_km) <= 0:
+            raise ValueError("Maksymalna długość trasy musi być dodatnia.")
+
         self._id = id 
         self._name = user_name
         self._preferred_temp_min = preferred_temp_min
